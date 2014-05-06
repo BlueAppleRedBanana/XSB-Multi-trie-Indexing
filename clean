@@ -1,0 +1,12 @@
+#!/bin/sh
+
+rm *_i*
+rm *.xwam
+rm *.*~
+rm *_dbg.P
+rm test/*_i*
+rm test/*.xwam
+rm test/*.*~
+rm test/*_dbg.P
+
+

@@ -1,0 +1,316 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+
+#define DEBUG_INDEX	%% To see _dbg.P and other traces. 
+%#define NONEWBASE
+#define REORDER_BASE		%% to reorder arguments of new base facts.
+% #define TERMEXP_RESULT	%% do not use idx file, but use term_expansion's result.
+
+%% The file has three term_expansions
+
+%%%% #1 term_expansion meets :-mtindex directive. %%%%
+%%%% #2 term_expansion meets EOF, end of file %%%%
+%%%% #3 Multi-trie indexing target predicates (=Base Facts) %%%%
+%%%% #4 Takes care of facts, queries, directives as default.
+
+%% #1 generates all necessary multi-trie index rules and save them into _idx.P
+%% #3 converts facts to new facts in new arg order 
+%% (i.e. p(a1,b1,c1,d1,e1,f1) -> p_6_newbase(a1,e1,f1,b1,d1,c1))
+%% #4 takes all other terms and just passes them into compiler without any touch.
+%% #2 finishes the job and loads _idx.P file. 
+
+%% Why do we need to put thing into a file?
+%% it's a way to avoid term_expansion's lazy assertion
+%% See details in RESEARCH #8
+
+
+
+
+:- dynamic '_$_$_mtindex'/5.	%% For multi-trie indexing
+:- dynamic '_$_$_outfile'/3.
+:- dynamic '_$_$_inputfile'/2.
+:- dynamic '_$_$_mtindex_dispatcher'/1.
+:- dynamic term_expansion/2.
+
+
+:- import parsing_file_name/1 from parse.
+
+:- import
+	file_put/2,
+	path_sysop/3
+   from file_io.
+ 
+:- import
+	length/2,
+	append/3,
+	member/2
+   from basics.
+
+%%%% Helper for list manipulation %%%%%%%%
+  
+:- import concat_atom/2, concat_atom/3 from string.
+  
+:- import term_variables/2 from constraintLib.
+:- import conget/2, conset/2 from gensym.
+
+:- import flatten/2 from lists.
+
+
+%%%% Multi-trie indexing rules %%%%%%%%
+:- import 
+	get_mtindexrule/3,
+	get_indexrules/5,
+	append_all/2 from genMtindexRule.
+
+%%%% generating new base predicate %%%%%%%%	
+:- import get_newbase/3,
+	get_newbasename/3 from genNewbase.
+
+%%%% directive utils %%%%%%%%
+:- import get_retractall/2, 
+	get_export/2, 
+	get_dynamic/2, 
+	get_table/2, 
+	get_arbitrary_queries/2 from directiveUtil.
+
+
+%%%% debugging %%%%%%%%%%%%%%%%%%%%%
+
+%:- dynamic writelnd/1.
+#ifdef DEBUG_INDEX
+writelnd(Pred) :-
+	open_outfile_if_necessary(_Idx,Dbg),
+	writeln(Dbg,Pred).
+#else
+writelnd(_).
+#endif
+
+#ifdef DEBUG_INDEX
+save_result_for_dbg(Result) :-
+	open_outfile_if_necessary(_Idx,Dbg),
+	(
+	  member(Clause,Result),
+	  writeq(Dbg,Clause),
+	  file_put(Dbg,CH_DOT),
+	  writelnd(Dbg:'WRITE'=Clause),
+	  nl(Dbg),
+	  fail
+	;
+	  true
+	).
+#else
+save_result_for_dbg(_).
+#endif
+
+open_outfile_if_necessary(IdxHandle,DbgHandle) :-
+	parsing_file_name(File),
+	\+ '_$_$_outfile'(File,_,_),
+	!,
+	get_out_file_names(File,IdxFile,_DbgFile),
+	open(IdxFile,write,IdxHandle),
+	open(_DbgFile,write,DbgHandle),
+	asserta('_$_$_outfile'(File,IdxHandle,DbgHandle)).
+
+open_outfile_if_necessary(IdxHandle,DbgHandle) :-
+	parsing_file_name(File),
+	'_$_$_outfile'(File,IdxHandle,DbgHandle).
+
+close_outfile :-
+	('_$_$_outfile'(File,IdxHandle,DbgHandle)
+	->	retractall('_$_$_outfile'(File,_,_)),
+#ifdef DEBUG_INDEX
+		get_out_file_names(File,IdxFile,DbgFile),
+		writelnd('CLOSE:'+File+DbgFile:DbgHandle+IdxFile:IdxHandle),
+#endif
+		close(DbgHandle),
+		close(IdxHandle)
+	;
+		true
+	).
+	
+%% file names for index and debug
+get_out_file_names(File,IdxFile,DbgFile) :-
+	path_sysop(basename,File,Base),
+	concat_atom([Base,'_idx.P'],IdxFile),
+	concat_atom([Base,'_dbg.P'],DbgFile).
+
+printtrace(Rule) :-
+	writelnd('CALL:'+Rule),
+	Rule,
+	writelnd('EXIT:'+Rule).
+
+save_result_idx(IndexRules) :-
+	open_outfile_if_necessary(IdxFile,_Dbg),
+	save_result_idx(IndexRules, IdxFile).
+
+save_result_idx([],_).
+save_result_idx([H|T],IdxFile) :-
+	write_canonical(IdxFile,H),
+	writeln(IdxFile,'.'),
+	save_result_idx(T,IdxFile).
+
+
+%%%% term_expansion meets :-mtindex directive. %%%%
+%% This term_expansion will get index information from the directive
+%% and save them into '_$_$_mtindex'/5 for the future purpose.
+%% (when the base fact conversion occurred)
+#ifdef TERMEXP_RESULT
+term_expansion(':-'(mtindex(Functor/Arity,trie,IndexArgOrderSets)),Result0) :-
+#else
+term_expansion(':-'(mtindex(Functor/Arity,trie,IndexArgOrderSets)),_Result) :-
+#endif
+	!,
+	writelnd('::term_expansion(mtindex)'),
+	length(Args,Arity),
+	OriginalHead =.. [Functor|Args],
+#ifdef NONEWBASE
+	get_indexrules(OriginalHead,IndexArgOrderSets,Functor,IndexRules,IndexRuleHeads),
+#else
+	get_newbasename(OriginalHead,IndexArgOrderSets,NewBaseName),
+	get_indexrules(OriginalHead,IndexArgOrderSets,NewBaseName,IndexRules,IndexRuleHeads),
+#endif
+	asserta('_$_$_mtindex'(Functor,Arity,NewBaseName,IndexArgOrderSets,IndexRuleHeads)),
+	get_mtindexrule(OriginalHead,IndexArgOrderSets,MtindexRule),
+	MtindexRule =.. [':-'|[MtindexHead|_]],
+	Dispatcher = (OriginalHead :- MtindexHead),
+	asserta('_$_$_mtindex_dispatcher'(Dispatcher)),
+	parsing_file_name(InputFile),
+	
+	%% Remembering the file which should be touched. 
+	%% the file which contains :-mtindex directiveUtil
+	%% or the file which contains the target facts. 
+	('_$_$_inputfile'(Functor,InputFile) -> true 
+	;
+		asserta('_$_$_inputfile'(Functor,InputFile))
+	),
+
+	%% get all necessary directives 
+	get_retractall(IndexRuleHeads,RetractIndexHeads),
+	get_retractall(MtindexHead,RetractMtindex),
+	ResultRetract = [(:- retractall(Functor)),RetractMtindex|RetractIndexHeads],
+	
+	get_dynamic(MtindexHead,DynamicMtindex),
+	get_dynamic(IndexRuleHeads,DynamicIndexHeads),
+	ResultDynamic = [(:- dynamic(Functor/Arity)),DynamicMtindex|DynamicIndexHeads],
+	
+	get_table(IndexRuleHeads,TableIndexHeads),
+	append(TableIndexHeads,IndexRules,ResultIndex),
+	
+	get_export(MtindexHead,ExportMtindex),
+	get_export(IndexRuleHeads,ExportIndexHeads),
+	ResultExport = [(:- export(Functor/Arity)),ExportMtindex|ExportIndexHeads],
+	
+	DirectiveNewBase = [(:- export(NewBaseName/Arity)),(:- dynamic(NewBaseName/Arity))],
+	DirectiveFunctor = [(:- export(Functor/Arity)),(:- dynamic(Functor/Arity))],
+	%% To prevent term_expansion's new arguments interference among rules. 
+	copy_term(ResultIndex,ResultIndex1),
+#ifdef NONEWBASE
+%	flatten([ResultRetract,DirectiveNewBase,ResultExport,ResultDynamic,ResultIndex1,[Dispatcher],[MtindexRule]],Result0),
+	flatten([ResultRetract,ResultExport,ResultDynamic,ResultIndex1,[MtindexRule],[(?- trace)]],Result0),
+%	flatten([ResultRetract,ResultDynamic,ResultIndex1,[MtindexRule]],Result0),
+#else
+	%%%% test for dynamic %%%%
+	%% It's enough to set original p/6 as dynamic only. 
+	%% Others, esp. setting mtindex dynamic results significant
+	%% decrease in performence. 
+	% flatten([ResultRetract,ResultIndex1,[Dispatcher],[MtindexRule]],Result0),
+	flatten([ResultRetract,[(:- dynamic(Functor/Arity))],ResultIndex1,[Dispatcher],[MtindexRule]],Result0),
+	% flatten([ResultRetract,ResultDynamic,ResultIndex1,[Dispatcher],[MtindexRule]],Result0),
+#endif	
+	writelnd('RESULT'=Result0),
+	save_result_idx(Result0).	%% Save result into _idx.P (temp file)
+					%% the file will be loaded using load_dyn(_idx).
+					%% by term_expansion(end_of_file,Result).
+
+%%%% term_expansion meets EOF, end of file %%%%
+%% If there's a multi-trie indexing, 
+%% put Initial indexrule queries for enabling tables.
+%% TODO: What if there are more than one multi-trie indexing?
+#ifdef TERMEXP_RESULT
+term_expansion(end_of_file, Result) :-
+#else
+term_expansion(end_of_file, end_of_file) :-
+#endif
+	parsing_file_name(File),
+	'_$_$_outfile'(File,_,_),
+	'_$_$_inputfile'(_,File),
+	'_$_$_mtindex'(_,_,_,_,IndexRuleHeads),
+	!,
+	writelnd('::term_expansion(eof)'=end_of_file),
+	% If there has been a multi-trie indexing before.
+	% it asserts index rule initial query for tabling.
+	get_arbitrary_queries(IndexRuleHeads, InitTablingQuery),
+	save_result_idx(InitTablingQuery),
+	%% Get the idx file loaded
+	get_out_file_names(File,IdxFile,_DbgFile),
+	writelnd('EOF! file closing'+File),
+	close_outfile,
+	abolish(term_expansion/2),
+#ifdef TERMEXP_RESULT
+	append(InitTablingQuery,end_of_file,Result).
+#else
+#ifdef NONEWBASE
+	consult(IdxFile),
+	'_$_$_mtindex_dispatcher'(Dispatcher),
+	asserta(Dispatcher).
+	
+#else
+%	consult(IdxFile). %% load_dyn(IdxFile) does not support tables
+	ensure_loaded(IdxFile).
+#endif
+#endif
+	%% retract does not work	
+%	retract(term_expansion(':-'(mtindex(Functor/Arity,trie,IndexArgOrderSets)),_Result)),
+%	retract(term_expansion(Hd,_Result)),
+%	retract(term_expansion(Hd,Hd)),
+%	retract(term_expansion(end_of_file, end_of_file)).
+	%% retractall(term_expansion) does not work also.
+	%% retractall(term_expansion/2) does not work also.
+
+%%%% Multi-trie indexing target predicates (=Base Facts) %%%%
+%% term_expansion meets a predicate, p(a,b)
+%% Need one more case for facts that match the index.
+%% Have to think of an efficient way.
+%%%% CAUTION! SHOULD BE IN THE END OF ALL TERM_EXPANSIONS! 
+%%%% ESPECIALLY BEFORE term_expansion for EOF. 
+%%%% OTHERWISE, EOF WILL BE CAUGHT HERE AND NEVER BE BACK.
+#ifndef NONEWBASE
+#ifdef TERMEXP_RESULT
+term_expansion(Hd,NewBase) :-
+#else
+term_expansion(Hd,_Result) :-
+#endif
+	\+ (Hd = end_of_file),
+	Hd =.. [Functor|Args],    %% Put head args in Args
+	functor(Hd,_Functor,Arity),
+	%% Check if it is a target predicate of multi-trie indexing
+	'_$_$_mtindex'(Functor,Arity,NewBaseName,IndexArgOrderSets,_IndexRuleHeaads),
+	!,
+	writelnd('::term_expansion(facts)'=Hd),
+	parsing_file_name(InputFile),
+	('_$_$_inputfile'(Functor,InputFile) 
+	->	true 
+	;	asserta('_$_$_inputfile'(Functor,InputFile))
+	),
+	get_newbase(NewBaseName, Args, IndexArgOrderSets, NewBase),
+	save_result_idx([NewBase]).
+#endif
+
+% Takes care of facts, queries, directives as default.
+%% This should exist. Unless, all terms which are not caught by term_expansion
+%% will not go into XSB compiler as the terms 'fail' in all term_expansion.
+term_expansion(Hd,Hd) :-
+	\+ (Hd = end_of_file),
+	Hd \= term_expansion(_,_),
+	!,
+	writelnd('::term_expansion(pred)'=Hd),
+	save_result_for_dbg([Hd]).
+	
+
+
+	
+
+
+
+
+

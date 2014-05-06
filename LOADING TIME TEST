@@ -1,0 +1,454 @@
+%%%%%%%%%%% No multi-trie indexing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+jin@ubuntu:~/XSB/xsb-multi-trie-indexing$ ../bin/xsb -p
+[xsb_configuration loaded]
+[sysinitrc loaded]
+
+XSB Version 3.4.0 (Soy mILK) of May 1, 2013
+[x86_64-unknown-linux-gnu 64 bits; mode: optimal; engine: slg-wam; scheduling: local]
+[Patch date: 2013/05/02 17:42:32]
+
+| ?- [run].
+[Compiling ./run]
+[run compiled, cpu time used: 0.0040 seconds]
+[run loaded]
+[Compiling ./mtindex]
+[mtindex compiled, cpu time used: 0.0040 seconds]
+[mtindex loaded]
+[Compiling ./listProcessing]
+[Module listProcessing compiled, cpu time used: 0.0040 seconds]
+[listProcessing loaded]
+[Compiling ./directiveUtil]
+[Module directiveUtil compiled, cpu time used: 0.0040 seconds]
+[directiveUtil loaded]
+[Compiling ./genMtindexRule]
+[Module genMtindexRule compiled, cpu time used: 0.0200 seconds]
+[genMtindexRule loaded]
+[Compiling ./genNewbase]
+++Warning[XSB]: [Compiler] ./genNewbase : Undefined predicate _$_$_mtindex/5
+[Module genNewbase compiled, cpu time used: 0.0040 seconds]
+[genNewbase loaded]
+[gpp: Preprocessing /home/jin/XSB/xsb-multi-trie-indexing/termExp.P]
+[/home/jin/XSB/xsb-multi-trie-indexing/termExp.P dynamically loaded, cpu time used: 0.0040 seconds]
+[Compiling ./data10k]
+[Module data10k compiled, cpu time used: 29.3610 seconds]
+[data10k loaded, cpu time used: 0.0480 seconds]
+PROFILE FOR: [ data10k]  Total cputime: 29.4570 seconds
+
+Total Count: 2695
+
+                    0% (0)  Unknown/?
+                    3% (93)  Garbage Collecting/
+3% (93)  Unknown
+                    0% (1)  library_directory/1
+                    0% (2)  term_expansion/2
+0% (3)  usermod
+                    0% (1)  =../2
+                    0% (3)  expand_term/2
+                    0% (1)  repeat/0
+                    0% (1)  write/2
+                    0% (1)  \+/1
+                    0% (1)  call_goal_cut_trans/3
+0% (8)  standard
+                    0% (5)  load_exec/2
+0% (5)  consult
+                    0% (4)  parsort/4
+0% (4)  machine
+                    0% (1)  assert0/4
+                    0% (1)  code_to_buff/2
+                    0% (1)  assert/4
+0% (3)  assert
+                    0% (5)  member/2
+                    0% (2)  log_ith/3
+                    0% (2)  ith0/3
+                    0% (10)  log_ith0/4
+                    1% (23)  bintree0/4
+2% (42)  basics
+                    0% (2)  _$op1/3
+0% (2)  file_op
+                    0% (2)  parse_preddef_sym/5
+                    0% (1)  accumulate_clauses/4
+                    0% (4)  trans_args/5
+                    0% (3)  trans_arg/5
+                    0% (1)  trans_head_#303/6
+0% (11)  parse
+                    0% (1)  call_xsb_hook/3
+0% (1)  xsb_hook
+                    0% (5)  file_put/2
+                    0% (1)  check_open_stream_or_alias/5
+                    0% (2)  xsb_stream_lock/1
+                    0% (2)  xsb_stream_unlock/1
+                    0% (5)  is_valid_stream/2
+1% (15)  file_io
+                    0% (1)  singleton_check/2
+0% (1)  singlton
+                    0% (1)  file_read/3
+                    0% (1)  read_tokens/4
+                    0% (1)  read4/4
+                    0% (1)  read_prefixop/3
+                    0% (3)  read5/5
+                    0% (4)  read_exprtl0/5
+                    0% (2)  read_args/3
+                    0% (1)  read_args1/4
+                    0% (2)  read_exprtl01/6
+                    0% (1)  l_length/2
+                    0% (2)  read_newargs/3
+                    0% (4)  read_next_token_c/5
+                    0% (1)  read=.._#301/3
+1% (24)  xsb_read
+                    0% (2)  write_int/2
+                    0% (2)  l_write/5
+0% (4)  xsb_writ
+                    0% (1)  compile_internal/5
+0% (1)  compile
+                    0% (2)  gensym/2
+                    0% (2)  gennum/1
+0% (4)  gensym
+                    0% (2)  infer_export_fill/4
+                    0% (1)  infer_usage/3
+                    0% (4)  infer_usage_of_symbol/5
+                    0% (1)  check_clause/4
+                    0% (1)  check_args/4
+                    0% (1)  check_body/4
+                    0% (3)  add_if_necessary/3
+                    0% (1)  check_metapredicates/2
+1% (14)  useinfer
+                    0% (1)  inprog/3
+                    0% (2)  inp_body/9
+                    0% (1)  need_alloc/4
+                    0% (2)  inp_arg/10
+                    0% (5)  inp_subargs/9
+0% (11)  inprog
+                    0% (4)  flt_body/2
+                    0% (1)  flt_args/6
+0% (5)  flatten
+                    0% (1)  rval_needed/2
+                    0% (2)  tbldpars/5
+0% (3)  tp_goal
+                    0% (2)  asm_get_index/5
+                    0% (3)  asm_text_size/5
+0% (5)  asm
+                    0% (1)  vprag_common/2
+                    0% (1)  vprag_level/2
+                    0% (1)  addkey/4
+                    0% (2)  vprag_loc/2
+                    0% (1)  vprag_type/2
+                    0% (2)  alloc_vars/4
+                    0% (1)  collect_variables_in_occ_list/3
+                    0% (1)  mark_thru_tab/1
+                    0% (1)  collect_type2/4
+                    0% (1)  get_pre_uses/8
+                    0% (1)  get_pre_uses_one/9
+                    0% (1)  accum_pre_uses/6
+1% (14)  varproc
+                    0% (2)  asm_pre/3
+0% (2)  asm_opt
+                    0% (4)  asm_inst/4
+0% (4)  asm_inst
+                    0% (2)  membercheck/2
+0% (2)  listutil
+                    0% (2)  asm_putlength/2
+                    0% (11)  asm_putsym/2
+                    0% (1)  category_code/2
+                    0% (5)  asm_gentext_inst/3
+                    0% (1)  asm_genargs/3
+                    0% (1)  asm_genarg/3
+1% (21)  asmpass2
+                    0% (2)  sym_name/3
+                    0% (1)  sym_prop/2
+                    0% (7)  sym_insert/5
+                    0% (1)  add_new_clause/3
+                    0% (2)  sym_env/2
+                    0% (2)  sym_scan/3
+                    86% (2327)  sym_inserti/6
+                    0% (3)  sym_propin/4
+                    0% (1)  get_end_ith_bucket/2
+                    0% (12)  sym_propin1/4
+                    0% (10)  sym_prop0/2
+                    0% (3)  extract_symlist1/3
+                    0% (2)  add_new_clause1/4
+                    0% (2)  add_tree/4
+                    0% (1)  tree_listify/3
+88% (2376)  symtab
+                    0% (1)  tclause/5
+                    0% (1)  theadpars/6
+                    0% (5)  tbody/12
+0% (7)  tprog
+                    0% (1)  index_genretrys/5
+0% (1)  tp_index
+                    0% (1)  pre_ifthen/5
+0% (1)  preproc
+                    0% (3)  compile_popt21/3
+                    0% (2)  compile_popt4/3
+                    0% (2)  compile_popt11/3
+                    0% (1)  compile_popt31/3
+0% (8)  peephole
+
+yes
+
+
+
+%%%%%%%%%%% WITH  newbase arg order rearrangement %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+jin@ubuntu:~/XSB/xsb-multi-trie-indexing$ ../bin/xsb -p
+[xsb_configuration loaded]
+[sysinitrc loaded]
+
+XSB Version 3.4.0 (Soy mILK) of May 1, 2013
+[x86_64-unknown-linux-gnu 64 bits; mode: optimal; engine: slg-wam; scheduling: local]
+[Patch date: 2013/05/02 17:42:32]
+
+| ?- [run].
+[Compiling ./run]
+[run compiled, cpu time used: 0.0040 seconds]
+[run loaded]
+[Compiling ./mtindex]
+[mtindex compiled, cpu time used: 0.0000 seconds]
+[mtindex loaded]
+[Compiling ./listProcessing]
+[Module listProcessing compiled, cpu time used: 0.0040 seconds]
+[listProcessing loaded]
+[Compiling ./directiveUtil]
+[Module directiveUtil compiled, cpu time used: 0.0040 seconds]
+[directiveUtil loaded]
+[Compiling ./genMtindexRule]
+[Module genMtindexRule compiled, cpu time used: 0.0160 seconds]
+[genMtindexRule loaded]
+[Compiling ./genNewbase]
+++Warning[XSB]: [Compiler] ./genNewbase : Undefined predicate _$_$_mtindex/5
+[Module genNewbase compiled, cpu time used: 0.0080 seconds]
+[genNewbase loaded]
+[gpp: Preprocessing /home/jin/XSB/xsb-multi-trie-indexing/termExp.P]
+[/home/jin/XSB/xsb-multi-trie-indexing/termExp.P dynamically loaded, cpu time used: 0.0040 seconds]
+[Compiling ./data10k]
+
+
+
+[Compiling ./data10k_idx]
+[Module data10k_idx compiled, cpu time used: 30.4970 seconds]
+[data10k_idx loaded, cpu time used: 0.0480 seconds]
+p_6_newbase_156243/6 searched 423 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6453 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 3111 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 423 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6453 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 3111 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 423 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6453 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 3111 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p(A,B,C,D,E,F) :-
+    p_6_mtindex_156243(A,B,C,D,E,F).
+
+p_6_mtindex_156243(A,B,C,D,E,F) :-
+    (nonvar(A)
+     -> p_6_mtindex_156243_6_index_123(A,E,F,B,D,C)
+     ;  (nonvar(B)
+         -> p_6_mtindex_156243_6_index_45(B,D,A,E,F,C)
+         ;  (nonvar(C)
+             -> p_6_mtindex_156243_6_index_6(C,A,E,F,B,D)
+            )
+        )
+    ).
+
+p_6_mtindex_156243_6_index_123(A,B,C,D,E,F) :-
+    p_6_newbase_156243(A,B,C,G,H,I),
+    G = D,
+    H = E,
+    I = F.
+
+p_6_mtindex_156243_6_index_45(A,B,C,D,E,F) :-
+    p_6_newbase_156243(G,H,I,A,B,J),
+    G = C,
+    H = D,
+    I = E,
+    J = F.
+
+p_6_mtindex_156243_6_index_6(A,B,C,D,E,F) :-
+    p_6_newbase_156243(G,H,I,J,K,A),
+    G = B,
+    H = C,
+    I = D,
+    J = E,
+    K = F,
+    A = A.
+
+
+Memory (total)           72266992 bytes:        20952312 in use,        51314680 free
+  permanent space        11282808 bytes:        11282808 in use,               0 free
+    atom                                         4375808
+    string                                       1480816
+    asserted                                     2315944
+    compiled                                      989864
+    findall                                        42000
+    profile                                      1280000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         33554432 bytes:             888 in use,        33553544 free
+    global                                           360
+    local                                            528
+  trail/cp space         16777216 bytes:            1696 in use,        16775520 free
+    trail                                            680
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space        10177376 bytes:         9666832 in use,          510544 free
+
+Tabling Operations
+  3 subsumptive call check/insert ops: 3 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  30001 answer check/insert ops: 30001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  34 heap (  4 string) garbage collections by sliding: collected 9636565 cells in 0.948057 secs
+
+Time: 32.066 sec. cputime,  49.025 sec. elapsetime
+
+
+
+
+
+
+%%%%%%%%%%% WITHOUT newbase arg order rearrangement %%%%%%%%%%%%%%%%%%%55
+
+jin@ubuntu:~/XSB/xsb-multi-trie-indexing$ ../bin/xsb -p
+[xsb_configuration loaded]
+[sysinitrc loaded]
+
+XSB Version 3.4.0 (Soy mILK) of May 1, 2013
+[x86_64-unknown-linux-gnu 64 bits; mode: optimal; engine: slg-wam; scheduling: local]
+[Patch date: 2013/05/02 17:42:32]
+
+| ?- [run].
+[Compiling ./run]
+[run compiled, cpu time used: 0.0040 seconds]
+[run loaded]
+[Compiling ./mtindex]
+[mtindex compiled, cpu time used: 0.0040 seconds]
+[mtindex loaded]
+[Compiling ./listProcessing]
+[Module listProcessing compiled, cpu time used: 0.0040 seconds]
+[listProcessing loaded]
+[Compiling ./directiveUtil]
+[Module directiveUtil compiled, cpu time used: 0.0080 seconds]
+[directiveUtil loaded]
+[Compiling ./genMtindexRule]
+[Module genMtindexRule compiled, cpu time used: 0.0320 seconds]
+[genMtindexRule loaded]
+[Compiling ./genNewbase]
+++Warning[XSB]: [Compiler] ./genNewbase : Singleton variable IndexArgNumbers in a clause of get_newbase/4
+++Warning[XSB]: [Compiler] ./genNewbase : Undefined predicate _$_$_mtindex/5
+++Warning[XSB]: [Compiler] ./genNewbase : Unused symbol rearrange_args_list/3
+++Warning[XSB]: [Compiler] ./genNewbase : Unused symbol genMtindexRule/0
+[Module genNewbase compiled, cpu time used: 0.0000 seconds]
+[genNewbase loaded]
+[gpp: Preprocessing /home/jin/XSB/xsb-multi-trie-indexing/termExp.P]
+[/home/jin/XSB/xsb-multi-trie-indexing/termExp.P dynamically loaded, cpu time used: 0.0040 seconds]
+[Compiling ./data10k]
+
+
+
+[Compiling ./data10k_idx]
+[Module data10k_idx compiled, cpu time used: 29.2450 seconds]
+[data10k_idx loaded, cpu time used: 0.0480 seconds]
+p_6_newbase_156243/6 searched 365 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6941 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 2676 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 365 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6941 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 2676 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 365 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 6941 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p_6_newbase_156243/6 searched 2676 unindexed clauses
+  p_6_newbase_156243(_,_,_,_,_,_)
+p(A,B,C,D,E,F) :-
+    p_6_mtindex_156243(A,B,C,D,E,F).
+
+p_6_mtindex_156243(A,B,C,D,E,F) :-
+    (nonvar(A)
+     -> p_6_mtindex_156243_6_index_156(A,E,F,B,C,D)
+     ;  (nonvar(B)
+         -> p_6_mtindex_156243_6_index_24(B,D,A,C,E,F)
+         ;  (nonvar(C)
+             -> p_6_mtindex_156243_6_index_3(C,A,B,D,E,F)
+            )
+        )
+    ).
+
+p_6_mtindex_156243_6_index_156(A,B,C,D,E,F) :-
+    p_6_newbase_156243(A,G,H,I,B,C),
+    G = D,
+    H = E,
+    I = F,
+    C = C.
+
+p_6_mtindex_156243_6_index_24(A,B,C,D,E,F) :-
+    p_6_newbase_156243(G,A,H,B,I,J),
+    G = C,
+    H = D,
+    I = E,
+    J = F.
+
+p_6_mtindex_156243_6_index_3(A,B,C,D,E,F) :-
+    p_6_newbase_156243(G,H,A,I,J,K),
+    G = B,
+    H = C,
+    I = D,
+    J = E,
+    K = F.
+
+
+Memory (total)          122598496 bytes:        20952168 in use,       101646328 free
+  permanent space        11282728 bytes:        11282728 in use,               0 free
+    atom                                         4375808
+    string                                       1480816
+    asserted                                     2315944
+    compiled                                      989784
+    findall                                        42000
+    profile                                      1280000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         67108864 bytes:             888 in use,        67107976 free
+    global                                           360
+    local                                            528
+  trail/cp space         33554432 bytes:            1696 in use,        33552736 free
+    trail                                            680
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space        10177312 bytes:         9666768 in use,          510544 free
+
+Tabling Operations
+  3 subsumptive call check/insert ops: 3 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  30001 answer check/insert ops: 30001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  34 heap (  4 string) garbage collections by sliding: collected 8897421 cells in 1.088070 secs
+
+Time: 30.758 sec. cputime,  33.471 sec. elapsetime
+
+

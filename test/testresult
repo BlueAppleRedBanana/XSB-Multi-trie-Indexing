@@ -1,0 +1,865 @@
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h389],(1  ','  10000),(1000  ','  5),_h409)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0160]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0080]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0040]
+TotalTime: = 0.2640
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h1202121,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h1202131)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.0490]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0160]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0160]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0080]
+TotalTime: = 0.3010
+Cleaning...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 2: With single-trie indexing
+Loading data...
+++Warning[XSB]: [Compiler] data10kst : export directive ignored.
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10kst.P dynamically loaded, cpu time used: 0.3760 seconds]
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h3505808],(1  ','  10000),(1000  ','  5),_h3505828)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0160]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0080]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0040]
+TotalTime: = 0.2400
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h6761430,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h6761440)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,2.8040]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,2.6050]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,2.2880]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,1.9840]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,1.7560]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,1.4760]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,1.1200]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.8680]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.5960]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.2840]
+TotalTime: = 15.7810
+Cleaning...
+++Warning[XSB]: [Compiler] data10kmt : export directive ignored.
+
+
+
+
+
+
+p_6_mtindex_123456_6_index_1 : 6
+[Compiling ./usermod_idx]
+[Module usermod_idx compiled, cpu time used: 30.4380 seconds]
+
+++Warning[XSB]: [Runtime/C] p/6 (type 1) had been defined in module: usermod
+[usermod_idx loaded, cpu time used: 0.0480 seconds]
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10kmt.P dynamically loaded, cpu time used: 31.0780 seconds]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 3: With multi-trie indexing
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h58],(1  ','  10000),(1000  ','  5),_h78)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.2480]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0120]
+TotalTime: = 0.7840
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h4090461,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h4090471)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.2800]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.2880]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.2680]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.2440]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0200]
+TotalTime: = 1.4160
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HASH-STATIC :-index(p/6,[1,2]).
+
+Memory (total)           59414656 bytes:         8824392 in use,        50590264 free
+  permanent space         8584248 bytes:         8584248 in use,               0 free
+    atom                                         4343168
+    string                                       1179096
+    asserted                                       14568
+    compiled                                     2249168
+    buffer                                        786432
+    other                                          11816
+  glob/loc space         33554432 bytes:             968 in use,        33553464 free
+    global                                           376
+    local                                            592
+  trail/cp space         16777216 bytes:            2560 in use,        16774656 free
+    trail                                           1544
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          236616 bytes:          236616 in use,               0 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  0 variant call check/insert ops: 0 producers, 0 variants.
+  0 answer check/insert ops: 0 unique inserts, 0 redundant.
+
+  18 heap (  2 string) garbage collections by sliding: collected 2969454 cells in 0.720044 secs
+
+Time: 2.628 sec. cputime,  4.008 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h59],(1  ','  10000),(1000  ','  30),_h79)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.1880]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.3080]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.1400]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.1120]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.1400]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0200]
+TotalTime: = 1.2320
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h1836153,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h1836163)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,1.4400]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,1.4000]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,1.5200]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,1.2840]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,1.3480]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,1.2120]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.8840]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.7000]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.4880]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.2560]
+TotalTime: = 10.5320
+Cleaning...
+
+Memory (total)           76401640 bytes:        65457904 in use,        10943736 free
+  permanent space         8794016 bytes:         8794016 in use,               0 free
+    atom                                         4343168
+    string                                       1388864
+    asserted                                       14568
+    compiled                                     2249168
+    buffer                                        786432
+    other                                          11816
+  glob/loc space         33554432 bytes:        27618088 in use,         5936344 free
+    global                                      22509656
+    local                                        5108432
+  trail/cp space         33554432 bytes:        28809184 in use,         4745248 free
+    trail                                        1799624
+    choice point                                27009560
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          236616 bytes:          236616 in use,               0 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  0 variant call check/insert ops: 0 producers, 0 variants.
+  0 answer check/insert ops: 0 unique inserts, 0 redundant.
+
+  59 heap (  6 string) garbage collections by sliding: collected 80749634 cells in 7.512471 secs
+
+Time: 23.369 sec. cputime,  25.032 sec. elapsetime
+
+
+
+
+HASH - DYNAMIC
+:-index(p/6,[1,2]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 1: Hash tabling
+Loading data...
+Loading data...
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_hash.P dynamically loaded, cpu time used: 0.3040 seconds]
+
+Memory (total)           11554176 bytes:         6623648 in use,         4930528 free
+  permanent space         6319848 bytes:         6319848 in use,               0 free
+    atom                                          307352
+    string                                       1192552
+    asserted                                     3068704
+    compiled                                      952992
+    buffer                                        786432
+    other                                          11816
+  glob/loc space          2097152 bytes:           63624 in use,         2033528 free
+    global                                         63032
+    local                                            592
+  trail/cp space          2097152 bytes:            2464 in use,         2094688 free
+    trail                                           1448
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          564864 bytes:          237624 in use,          327240 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  1 answer check/insert ops: 1 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+   0 heap (  0 string) garbage collections by copying: collected 0 cells in 0.000000 secs
+
+Time: 0.344 sec. cputime,  2.113 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h7891],(1  ','  10000),(1000  ','  30),_h7911)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.3760]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.4040]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.2280]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.4520]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.4320]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.1560]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.1440]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.1000]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0320]
+TotalTime: = 2.3880
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h5860225,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h5860235)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.2720]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.2520]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.7250]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.2120]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.1880]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.1480]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.1280]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.1080]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0280]
+TotalTime: = 2.1250
+Cleaning...
+
+Memory (total)          208857232 bytes:       186520552 in use,        22336680 free
+  permanent space         6490616 bytes:         6490616 in use,               0 free
+    atom                                          307352
+    string                                       1363320
+    asserted                                     3068704
+    compiled                                      952992
+    buffer                                        786432
+    other                                          11816
+  glob/loc space         67108864 bytes:        58310984 in use,         8797880 free
+    global                                      37199016
+    local                                       21111968
+  trail/cp space        134217728 bytes:       121481240 in use,        12736488 free
+    trail                                        1966184
+    choice point                               119515056
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          564864 bytes:          237624 in use,          327240 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  1 answer check/insert ops: 1 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  84 heap (  9 string) garbage collections by sliding: collected 75951847 cells in 19.509216 secs
+
+Time: 26.130 sec. cputime,  28.745 sec. elapsetime
+
+
+
+
+
+
+
+Multi-trie DYNAMIC 
+:- mtindex(p/6,trie,[[1],[2]]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 3: With multi-trie indexing
+Loading data...
+
+
+[Compiling ./usermod_idx]
+[Module usermod_idx compiled, cpu time used: 26.9130 seconds]
+[usermod_idx loaded, cpu time used: 0.0480 seconds]
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_mt.P dynamically loaded, cpu time used: 27.4770 seconds]
+
+Memory (total)           67872712 bytes:        16530240 in use,        51342472 free
+  permanent space        10001688 bytes:        10001688 in use,               0 free
+    atom                                         4374656
+    string                                       1481120
+    asserted                                     2321616
+    compiled                                      983920
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         33554432 bytes:            1896 in use,        33552536 free
+    global                                          1304
+    local                                            592
+  trail/cp space         16777216 bytes:            2632 in use,        16774584 free
+    trail                                           1616
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064216 bytes:         6523936 in use,          540280 free
+
+Tabling Operations
+  2 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  22 heap (  3 string) garbage collections by sliding: collected 6620460 cells in 0.944056 secs
+
+Time: 27.518 sec. cputime,  28.927 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h175],(1  ','  10000),(1000  ','  5),_h195)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.1560]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.1880]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.2480]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.1360]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0520]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0160]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0120]
+TotalTime: = 0.9120
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h3591718,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h3591728)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.2040]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.2120]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.2200]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0520]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.2320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0040]
+TotalTime: = 1.0880
+
+Memory (total)          151693088 bytes:       110431552 in use,        41261536 free
+  permanent space         9935760 bytes:         9935760 in use,               0 free
+    atom                                         4374656
+    string                                       1415192
+    asserted                                     2321616
+    compiled                                      983920
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         67108864 bytes:        35535552 in use,        31573312 free
+    global                                      26218216
+    local                                        9317336
+  trail/cp space         67108864 bytes:        58435992 in use,         8672872 free
+    trail                                        2581232
+    choice point                                55854760
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064440 bytes:         6524160 in use,          540280 free
+
+Tabling Operations
+  550002 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 550000 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  66 heap (  8 string) garbage collections by sliding: collected 89979187 cells in 8.588533 secs
+
+Time: 39.154 sec. cputime,  40.889 sec. elapsetime
+
+
+Multi-trie 
+
+/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_mt.P dynamically loaded, cpu time used: 25.1850 seconds]
+
+Memory (total)           67872632 bytes:        16530160 in use,        51342472 free
+  permanent space        10001736 bytes:        10001736 in use,               0 free
+    atom                                         4374656
+    string                                       1481096
+    asserted                                     2321616
+    compiled                                      983992
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         33554432 bytes:            1896 in use,        33552536 free
+    global                                          1304
+    local                                            592
+  trail/cp space         16777216 bytes:            2632 in use,        16774584 free
+    trail                                           1616
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064088 bytes:         6523808 in use,          540280 free
+
+Tabling Operations
+  2 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  22 heap (  3 string) garbage collections by sliding: collected 6723955 cells in 0.928058 secs
+
+Time: 25.246 sec. cputime,  27.600 sec. elapsetime
+
+
+
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h175],(1  ','  10000),(1000  ','  30),_h195)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.8560]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,1.3120]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,3.8210]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.9120]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.9840]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,1.1880]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,1.0800]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,1.4400]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,1.4480]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.4920]
+TotalTime: = 13.5330
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h4744716,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h4744726)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,1.1880]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,1.7120]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,1.7960]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,2.5400]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,2.5840]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,1.9330]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,1.9240]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.9880]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,2.7160]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,1.0440]
+TotalTime: = 18.4250
+Cleaning...
+
+Memory (total)          688483920 bytes:       482462672 in use,       206021248 free
+  permanent space         9855808 bytes:         9855808 in use,               0 free
+    atom                                         4374656
+    string                                       1335168
+    asserted                                     2321616
+    compiled                                      983992
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space        134217728 bytes:       128472680 in use,         5745048 free
+    global                                      72596328
+    local                                       55876352
+  trail/cp space        536870912 bytes:       337610064 in use,       199260848 free
+    trail                                        2617208
+    choice point                               334992856
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064312 bytes:         6524032 in use,          540280 free
+
+Tabling Operations
+  3300002 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 3300000 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+ 105 heap ( 12 string) garbage collections by sliding: collected 180543428 cells in 42.410656 secs
+
+Time: 74.917 sec. cputime,  101.024 sec. elapsetime
+
+
+
+
+
+
+
+MULTI-TRIE DYNAMIC - enlarged memory 1.7gb
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 3: With multi-trie indexing
+Loading data...
+
+
+[Compiling ./usermod_idx]
+[Module usermod_idx compiled, cpu time used: 25.0210 seconds]
+[usermod_idx loaded, cpu time used: 0.0440 seconds]
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_mt.P dynamically loaded, cpu time used: 25.5850 seconds]
+
+Memory (total)           67872328 bytes:        16528648 in use,        51343680 free
+  permanent space        10001560 bytes:        10001560 in use,               0 free
+    atom                                         4373920
+    string                                       1481376
+    asserted                                     2321616
+    compiled                                      984272
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         33554432 bytes:            1984 in use,        33552448 free
+    global                                          1272
+    local                                            712
+  trail/cp space         16777216 bytes:            1336 in use,        16775880 free
+    trail                                            224
+    choice point                                    1112
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7063960 bytes:         6523680 in use,          540280 free
+
+Tabling Operations
+  2 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  22 heap (  3 string) garbage collections by sliding: collected 6901621 cells in 0.880054 secs
+
+Time: 25.606 sec. cputime,  27.735 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h171],(1  ','  10000),(1000  ','  30),_h191)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.7560]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.9720]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,1.3640]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.4200]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,1.0040]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.7400]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.7680]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.4440]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0400]
+TotalTime: = 6.5960
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h4540143,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h4540153)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,2.6600]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.8680]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.8560]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.8970]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.8720]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.8680]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,1.3040]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.7800]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0440]
+TotalTime: = 9.2450
+Cleaning...
+
+Memory (total)          420080160 bytes:       370984304 in use,        49095856 free
+  permanent space         9887632 bytes:         9887632 in use,               0 free
+    atom                                         4373920
+    string                                       1367448
+    asserted                                     2321616
+    compiled                                      984272
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space        134217728 bytes:       106962808 in use,        27254920 free
+    global                                      66043064
+    local                                       40919744
+  trail/cp space        268435456 bytes:       247609872 in use,        20825584 free
+    trail                                        2357288
+    choice point                               245252584
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064184 bytes:         6523904 in use,          540280 free
+
+Tabling Operations
+  3300002 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 3300000 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  85 heap ( 10 string) garbage collections by sliding: collected 181540239 cells in 21.649351 secs
+
+Time: 54.335 sec. cputime,  59.525 sec. elapsetime
+
+
+
+MULTI-TRIE DYNAMIC - enlarged memory 2.3gb
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 3: With multi-trie indexing
+Loading data...
+
+
+[Compiling ./usermod_idx]
+[Module usermod_idx compiled, cpu time used: 24.8570 seconds]
+[usermod_idx loaded, cpu time used: 0.0400 seconds]
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_mt.P dynamically loaded, cpu time used: 25.2250 seconds]
+
+Memory (total)           67872136 bytes:        16528184 in use,        51343952 free
+  permanent space        10001304 bytes:        10001304 in use,               0 free
+    atom                                         4373920
+    string                                       1481120
+    asserted                                     2321616
+    compiled                                      984272
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space         33554432 bytes:            1856 in use,        33552576 free
+    global                                          1264
+    local                                            592
+  trail/cp space         16777216 bytes:            1192 in use,        16776024 free
+    trail                                            176
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064024 bytes:         6523744 in use,          540280 free
+
+Tabling Operations
+  2 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  22 heap (  3 string) garbage collections by sliding: collected 6412177 cells in 0.956058 secs
+
+Time: 25.230 sec. cputime,  28.406 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h170],(1  ','  10000),(1000  ','  30),_h190)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.7240]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.9800]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,1.3040]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.3930]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.4920]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.7640]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.4680]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.4320]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.4120]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.4320]
+TotalTime: = 6.4010
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h3308742,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h3308752)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,2.2400]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.5840]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.8720]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.8880]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.8050]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.8560]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.8320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.1400]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0480]
+TotalTime: = 7.3530
+Cleaning...
+
+Memory (total)          420063968 bytes:       379093472 in use,        40970496 free
+  permanent space         9871376 bytes:         9871376 in use,               0 free
+    atom                                         4373920
+    string                                       1351192
+    asserted                                     2321616
+    compiled                                      984272
+    findall                                        42000
+    buffer                                        786432
+    other                                          11944
+  glob/loc space        134217728 bytes:       125310200 in use,         8907528 free
+    global                                      86093904
+    local                                       39216296
+  trail/cp space        268435456 bytes:       237387840 in use,        31047616 free
+    trail                                        2355320
+    choice point                               235032520
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space         7064248 bytes:         6523968 in use,          540280 free
+
+Tabling Operations
+  3300002 subsumptive call check/insert ops: 2 producers, 0 variants,
+  0 properly subsumed (0 table entries), 3300000 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  20001 answer check/insert ops: 20001 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  83 heap ( 10 string) garbage collections by sliding: collected 178544439 cells in 20.401274 secs
+
+Time: 52.623 sec. cputime,  59.788 sec. elapsetime
+
+
+
+
+SINGLE TRIE 
+:- index(p/6,trie).
+%%	Type 2: With single-trie indexing
+Loading data...
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10k_trie.P dynamically loaded, cpu time used: 0.3280 seconds]
+
+Memory (total)           11215184 bytes:         6164624 in use,         5050560 free
+  permanent space         5850048 bytes:         5791768 in use,           58280 free
+    trie-asserted                                2531160 in use,           58280
+    atom                                          307224
+    string                                       1185136
+    asserted                                       15616
+    compiled                                      954384
+    buffer                                        786432
+    other                                          11816
+  glob/loc space          2097152 bytes:            1896 in use,         2095256 free
+    global                                          1304
+    local                                            592
+  trail/cp space          2097152 bytes:            2440 in use,         2094712 free
+    trail                                           1424
+    choice point                                    1016
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          695672 bytes:          368432 in use,          327240 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  1 answer check/insert ops: 1 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+   1 heap (  1 string) garbage collections by sliding: collected 7606 cells in 0.004000 secs
+
+Time: 0.368 sec. cputime,  1.661 sec. elapsetime
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h175],(1  ','  10000),(1000  ','  30),_h195)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,0.2400]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,0.1720]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,0.3760]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,0.4880]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,0.1080]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,0.5320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.0720]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.0200]
+TotalTime: = 2.1440
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h4158080,b,c,d,e,f],(1  ','  10000),(1000  ','  30),_h4158090)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,30,Time:,2.5120]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,30,Time:,2.9760]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,30,Time:,2.0520]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,30,Time:,2.9800]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,30,Time:,1.5880]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,30,Time:,1.2880]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,30,Time:,1.0360]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,30,Time:,0.6800]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,30,Time:,0.5040]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,30,Time:,0.2520]
+TotalTime: = 15.8680
+Cleaning...
+
+Memory (total)          409932424 bytes:       344612368 in use,        65320056 free
+  permanent space         6108152 bytes:         6049872 in use,           58280 free
+    trie-asserted                                2531160 in use,           58280
+    atom                                          307224
+    string                                       1443240
+    asserted                                       15616
+    compiled                                      954384
+    buffer                                        786432
+    other                                          11816
+  glob/loc space        134217728 bytes:       102733728 in use,        31484000 free
+    global                                      64715800
+    local                                       38017928
+  trail/cp space        268435456 bytes:       235459992 in use,        32975464 free
+    trail                                        2570240
+    choice point                               232889752
+  SLG unific. space        131072 bytes:               0 in use,          131072 free
+  SLG completion           131072 bytes:               0 in use,          131072 free
+  SLG table space          695928 bytes:          368688 in use,          327240 free
+
+Tabling Operations
+  0 subsumptive call check/insert ops: 0 producers, 0 variants,
+  0 properly subsumed (0 table entries), 0 used completed table.
+  0 relevant answer ident ops.  0 consumptions via answer list.
+  1 variant call check/insert ops: 1 producers, 0 variants.
+  1 answer check/insert ops: 1 unique inserts, 0 redundant.
+       1 DEs in the tables (space: 98312 bytes allocated,    56 in use)
+       1 DLs in the tables (space: 49160 bytes allocated,    32 in use)
+
+
+  77 heap (  9 string) garbage collections by sliding: collected 72512140 cells in 18.913186 secs
+
+Time: 37.890 sec. cputime,  40.299 sec. elapsetime
+
+

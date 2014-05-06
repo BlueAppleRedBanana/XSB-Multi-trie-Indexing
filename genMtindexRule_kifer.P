@@ -1,0 +1,440 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+#define USE_BASEINDEX
+
+:- import nth1/3, get_element_index/3, get_nth_element/3 from listProcessing. 
+  
+:- import nth0/3, flatten/2 from lists.
+:- import concat_atom/2 from string.
+
+:- import
+	length/2,
+	append/3,
+	member/2,
+	reverse/2
+   from basics.
+   
+%% Index has two factors
+%% 1. which arguments are the causes
+%% 2. which arguments are the results
+%% base index would be results are all. 
+
+:- export get_baseindex/2.
+% get_baseindex([[1,5,6],[2,4],[3,4,5,6]],Result).
+% Result = [3,4,5,6,1,2]
+get_baseindex(IndexSets,Result) :-
+	writeln(get_baseindex(IndexSets,Result)),
+	%% verA. Get the longest index set (to cover as many as possible)
+	get_longestfirst(IndexSets,LongestFirstSet),
+	%% verB. Get an index set which contains 1, and then choose the longest among them. 
+%	get_sethas1(IndexSets,SetHas1),
+%	get_longest(SetHas1,LongestSet),
+	combine_argnums_list(Result, LongestFirstSet).
+
+:- export get_sethas1/2.
+% get_sethas1([[1,5,6],[2,4],[3,4,5,6]],SetHas1).
+get_sethas1([],[]).
+get_sethas1([H|T],SetHas1) :-
+	(member(1,H) -> 
+		get_sethas1(T,SubResult),
+		SetHas1 = [H|SubResult] 
+	;
+		get_sethas1(T,SetHas1)
+	).
+			
+	
+:- export get_longest/2, get_longest/3.
+%:- import length/2 from basics.
+%get_longest([[1,5,6],[2,4],[3,4,5,6,7]],LongestSet).
+get_longest(IndexSet,LongestSet) :-
+	get_longest(IndexSet,[],LongestSet).
+
+get_longest([],SoFar,LongestSet) :-
+	LongestSet = SoFar.
+get_longest([H|T],SoFar,LongestSet) :-
+	length(H,Length1),
+	length(SoFar,Length2),
+	((Length1 >= Length2) -> 
+		get_longest(T,H,LongestSet)
+	;
+		get_longest(T,SoFar,LongestSet)
+	).
+
+% get_longestfirst([[1,5,6],[2,4],[3,4,5,6,7]],LongestSet).	
+:- export get_longestfirst/2, get_longestfirst/3.
+get_longestfirst(IndexSet,LongestFirstSet) :-
+	get_longestfirst(IndexSet,[],LongestFirstSet).
+	
+get_longestfirst([],SoFar,[SoFar]).
+get_longestfirst([H|T],SoFar,LongestFirstSet) :-
+	length(H,Length1),
+	length(SoFar,Length2),
+	((Length1 >= Length2) -> 
+		get_longestfirst(T,H,SubResult),
+		append(SubResult,[SoFar],LongestFirstSet)
+	;
+		get_longestfirst(T,SoFar,SubResult),
+		append(SubResult,[H],LongestFirstSet)
+	).
+		
+	
+	
+
+%%%% Generate Mtindex Rule %%%%%%%%
+:- export get_mtindexrule/3.
+%:- dynamic get_mtindexrule/3.
+%% get_mtindexrule(p(x1,x2,x3,x4,x5,x6),[[1,5,6],[2,4],[3,4,5,6]],Result).
+%% Result = (p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :- 
+%	nonvar(X1) -> p_6_mtindex_156243_6_index_123(X1,X5,X6,X2,X4,X3)  ';'
+%	nonvar(X2) -> p_6_mtindex_156243_6_index_45(X2,X4,X1,X5,X6,X3)  ';'
+%	nonvar(X3) -> p_6_mtindex_156243_6_index_6(X3,X1,X5,X6,X2,X4))
+get_mtindexrule(OriginalRuleHead,IndexSets,Result) :-
+	concat_atom(['mtindex_',IndexSets],Type),
+	new_pred(OriginalRuleHead,Type,MtindexRuleHead),
+	OriginalRuleHead =.. [_|Args],
+
+	%% Reorder argument [X1,X2,X3,X4,X5,X6] -> [X1,X5,X6,X2,X4,X3]
+	rearrange_args_list(IndexSets, Args, RearrangedArgs),
+	%% Reorder 'index numbers' to fit to the order of rearranged args. 
+	%% ex) [1,5,6], [X1,X2,X3,X4,X5,X6] -> [1,2,3],[X1,X5,X6,X2,X4,X3].
+%	rearrange_argnums_list(IndexSets, RearrangedIndexSets), 
+%	CombinedIndexSets = (IndexSets, RearrangedIndexSets),
+%	get_mtindexrule_bodies(MtindexRuleHead,CombinedIndexSets,RearrangedArgs,RuleBody),
+	%% Dealing first body - not using indexrule but using newbase call.
+	'_$_$_mtindex'(_Functor,_Arity,NewbaseName,_IndexSets,_IndexruleHeads),
+	IndexSets = [IndexSetH|IndexSetT],
+	get_nonvar_check(IndexSetH, Args, NonvarStatement),
+	NewBase =.. [NewbaseName|RearrangedArgs],
+	FirstBody = (NonvarStatement -> NewBase),
+	get_mtindexrule_bodies(MtindexRuleHead,IndexSetT,Args,RuleBody1),
+	RuleBody = (FirstBody ; RuleBody1),
+	Result = (MtindexRuleHead :- RuleBody).
+
+:- export get_mtindexrule_bodies/4.
+%% get_mtindexrule_bodies(p_6_mtindex(x1,x2,x3,x4,x5,x6),[[1,2,3],[4,5],[6]],[x1,x5,x6,x2,x4,x3],Result).
+%% Result = (nonvar(X1) -> p_6_mtindex_6_index_123(X1,X5,X6,X2,X4,X3)  ';'  
+%%			nonvar(X2) -> p_6_mtindex_6_index_45(X2,X4,X1,X5,X6,X3)  ';'  
+%%			nonvar(X3) -> p_6_mtindex_6_index_6(X3,X1,X5,X6,X2,X4))
+
+%% For default case, such as all arguments are variables.
+get_mtindexrule_bodies(MtindexRuleHead,[],_RearrangedArgs,Result) :-
+	'_$_$_mtindex'(Functor,_Arity,_NewbaseName,_IndexSets,_IndexruleHeads),
+	MtindexRuleHead =.. [_Head|Args],
+	Result =.. [Functor|Args].
+get_mtindexrule_bodies(MtindexRuleHead,IndexSets,RearrangedArgs,Result) :-
+	IndexSets = [IndexSetH|IndexSetT],
+	get_indexrule_head(MtindexRuleHead,IndexSetH,RearrangedArgs,IndexRuleHead),
+	get_nonvar_check(IndexSetH, RearrangedArgs, NonVarStatement),
+	Result1 = (NonVarStatement->IndexRuleHead),
+	get_mtindexrule_bodies(MtindexRuleHead,IndexSetT,RearrangedArgs,SubResult),
+	(SubResult = [] ->
+		Result = Result1	%% end of list
+	;
+		Result = (Result1 ; SubResult)
+	).
+
+:- export new_predname/4.
+new_predname(Head,Type,IndexArgNumbers,NewName) :-
+	pred_name_args_arity(Head,PredName,_,Arity),
+	concat_atom([PredName,'_',Arity,'_',Type,'_',IndexArgNumbers], NewName).
+
+:- export new_pred/3.
+new_pred(OriginalPred,Type,NewPred) :-
+	pred_name_args_arity(OriginalPred,OriginalName,Args,Arity),
+	concat_atom([OriginalName,'_',Arity,'_',Type], NewName),
+	NewPred =.. [NewName|Args].
+
+:- export pred_name_args_arity/4.
+pred_name_args_arity(Pred,Name,Args,Arity) :-
+	Pred =.. [Name|Args],
+	functor(Pred,_,Arity).
+	
+
+%%%% Arrange Order of Arguments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+:- export get_args_by_number/3.
+%% get_args_by_number([1,5,6,2,4,3], [X1,X2,X3,X4,X5,X6], RearrangedArgList).		
+get_args_by_number([],_,[]).
+get_args_by_number(NumList, Args, RearrangedArgList) :-
+	NumList = [Num|T],
+	get_args_by_number(T, Args, SubList),
+	nth1(Num, Args, Element),
+	RearrangedArgList = [Element|SubList].
+	
+:- export combine_argnums_list/2.
+%% combine_argnums_list(CombinedList, [[1,5,6],[2,4],[3]]).
+%% combine_argnums_list(CombinedList, [1,2]).
+combine_argnums_list([], []).
+combine_argnums_list(CombinedList, RearrangedIdxArgOrderSets) :-
+	flatten(RearrangedIdxArgOrderSets, CombinedDupList),
+	reverse(CombinedDupList,RevCombinedDupList),
+	remove_dups(RevCombinedDupList,RevCombinedList),
+	reverse(RevCombinedList,CombinedList).
+
+:- export remove_dups/2.
+% remove_dups(+List, -NewList):
+% New List isbound to List, but with duplicate items removed.
+remove_dups([],[]).
+remove_dups([First | Rest], NewRest) :-
+	member(First, Rest),
+	!,
+	remove_dups(Rest, NewRest).
+remove_dups([First | Rest], [First | NewRest]) :-
+	remove_dups(Rest, NewRest).
+
+:- export rearrange_args_list/3.	
+%% rearrange_args_list([[1,5,6],[2,4],[3]], [x1,x2,x3,x4,x5,x6], Result).
+%% Result = [X1,X5,X6,X2,X4,X3]
+rearrange_args_list(RearrangedIdxArgOrderSets, Args, ResultArgs) :- 
+	get_baseindex(RearrangedIdxArgOrderSets, CombinedList),
+	get_idxargs_normargs(CombinedList,Args,ResultIndexArgs,ResultNormArgs),
+	append(ResultIndexArgs,ResultNormArgs,ResultArgs).
+
+
+
+%%%%%%%% Arrange Argument Order Numbers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- export rearrange_argnums_list/2.
+%% Reorder 'index numbers' to fit to the order of rearranged args. 
+%% ex) [1,5,6], [X1,X2,X3,X4,X5,X6] -> [1,2,3],[X1,X5,X6,X2,X4,X3].
+%% rearrange_argnums_list([[1,5,6],[2,4],[3]], RearrangedIdxArgOrderSets). 
+%% RearrangedIdxArgOrderSets = [[1,2,3],[4,5],[6]]
+
+rearrange_argnums_list(IndexSets, RearrangedIdxArgOrderSets) :-
+	%writeln(rearrange_argnums_list(IndexSets, RearrangedIdxArgOrderSets)),
+	combine_argnums_list(CombinedArgNums, IndexSets),
+	rearrange_argnums_list_runner(IndexSets, CombinedArgNums, RearrangedIdxArgOrderSets).
+
+
+:- export rearrange_argnums_list_runner/3.
+%% rearrange_argnums_list_runner([[2,4],[3]], [1,5,6,2,4,3], RearrangedIdxArgOrderSets).
+%% RearrangedIdxArgOrderSets = [[4,5],[6]].
+%% rearrange_argnums_list([[1,5,6],[2,4],[3]],[_h170,_h226,_h240,_h184,_h212,_h198]
+
+rearrange_argnums_list_runner([],_,[]). 	
+rearrange_argnums_list_runner(IndexSets, CombinedArgNums, [RearrangedArgOrder|SubResult]) :-
+	%writeln(rearrange_argnums_list_runner(IndexSets, CombinedArgNums, [RearrangedArgOrder|SubResult])),
+	IndexSets = [IndexSetH|T],
+	rearrange_argnums(IndexSetH,CombinedArgNums,RearrangedArgOrder),	
+	rearrange_argnums_list_runner(T, CombinedArgNums, SubResult).
+
+
+:- export rearrange_argnums/3.
+%% rearrange_argnums([2,4], [1,5,6,2,4,3], RearrangedArgOrder).
+%% RearrangedArgOrder = [4,5]
+%% rearrange_argnums([3], [1,5,6,2,4,3], RearrangedArgOrder).
+
+rearrange_argnums([],_,[]).
+rearrange_argnums(ArgOrderSet,CombinedIndexSet,RearrangedArgOrder) :-
+	%writeln(rearrange_argnums(ArgOrderSet,CombinedIndexSet,RearrangedArgOrder)),
+	ArgOrderSet = [NumberH|T],
+	get_element_index(NumberH,CombinedIndexSet,N),
+	rearrange_argnums(T, CombinedIndexSet, SubResult),
+	RearrangedArgOrder = [N|SubResult].
+
+
+
+%%%% INDEX RULES MAIN %%%%%%%%
+%%%% Making index rules 
+%% based on MtindexHead, List of argument order numbers, Original arguements, 
+%% will result index rules and rule heads. 
+
+:- export get_indexrules/5.
+% get_indexrules(mtindex(x1,x2,x3,x4,x5,x6),
+%		[[1,5,6],[2,4],[3]],
+%		newbase,
+%		ResultIndexRules,
+%		ResultIndexRuleHeads).
+
+get_indexrules(OriginalHead, IndexSets, NewBaseName, ResultIndexRules, ResultIndexRuleHeads) :-
+	OriginalHead =.. [_|Args],
+	
+	%%%% It does not touch arg orders in newbase facts anymore. 
+
+	%% Reorder argument [X1,X2,X3,X4,X5,X6] -> [X1,X5,X6,X2,X4,X3]
+	% rearrange_args_list(IndexSets, Args, RearrangedArgs),
+
+	%% Reorder 'index numbers' to fit to the order of rearranged args. 
+	%% ex) [1,5,6], [X1,X2,X3,X4,X5,X6] -> [1,2,3],[X1,X5,X6,X2,X4,X3].
+	% rearrange_argnums_list(IndexSets, RearrangedIndexSets), 
+
+	%% Jump into recursive generation of multiple index rules.
+	get_indexrules(OriginalHead, IndexSets, Args, NewBaseName, ResultIndexRules, ResultIndexRuleHeads).
+%	get_indexrules(MtindexHead,IndexSets,NewBaseName,Args,ResultIndexRules,ResultIndexRuleHeads).
+	
+:- export get_indexrules/6.
+%get_indexrules(mtindex(x1,x2,x3,x4,x5,x6),
+%	[[1,5,6],[2,4],[3]],
+%	[x1,x2,x3,x4,x5,x6],
+%	newbase,
+%	ResultIndexRules, ResultIndexRuleHeads).		
+get_indexrules(_MtindexHead,[],_Args,_NewBaseName,[],[]).
+get_indexrules(MtindexHead, IndexSets, Args, NewBaseName, ResultIndexRules, ResultIndexRuleHeads) :-
+	IndexSets = [IndexSetH|IndexSetT],
+	get_an_indexrule(MtindexHead, IndexSetH, Args, NewBaseName, (IndexRule), IndexRuleHead),
+	copy_term(IndexRule,IndexRule1),	%% To prevent new arguments from interferring other rules arguments. 
+	get_indexrules(MtindexHead, IndexSetT,Args,NewBaseName,SubResultRules, SubResultRuleHeads),
+	append([IndexRule1], SubResultRules, ResultIndexRules),
+	append([IndexRuleHead], SubResultRuleHeads, ResultIndexRuleHeads).	
+	
+:- export get_an_indexrule/6.
+%% get a single index rule and rule head.
+%get_an_indexrule(mtindex(x1,x2,x3,x4,x5,x6),
+%	[1,5,6],
+%	[x1,x2,x3,x4,x5,x6],
+%	newbase,
+%	ResultIndexRule,ResultIndexRuleHead).
+get_an_indexrule(MtindexHead,IndexSet,Args,NewBaseName,ResultIndexRule,ResultIndexRuleHead) :- 
+	get_indexrule_head(MtindexHead,IndexSet,Args,ResultIndexRuleHead),
+	get_indexrule_body(IndexSet,NewBaseName,Args,ResultIndexRuleBodyAtom),
+	%writeln(['New Rule: ',ResultIndexRuleHead,':-',ResultIndexRuleBodyAtom]),
+	ResultIndexRule = (ResultIndexRuleHead :- ResultIndexRuleBodyAtom).
+
+:- export get_indexrule_head/4.
+% get_indexrule_head(mtindex(x1,x2,x3,x4,x5,x6),
+%	[1,5,6],
+%	[x1,x2,x3,x4,x5,x6],ResultIndexRulePred).
+%% ResultIndexRulePred = mtindex_6_index_156(x1,x5,x6,x2,x4,x3).
+get_indexrule_head(MtindexHead, IndexSet, Args, ResultIndexRulePred) :- 
+	get_idxargs_normargs(IndexSet,Args,ResultIndexArgs,ResultNormArgs),
+	new_predname(MtindexHead, 'index', IndexSet, IndexHeadName), 
+	append(ResultIndexArgs,ResultNormArgs,ResultArgs),
+	ResultIndexRulePred =.. [IndexHeadName|ResultArgs].	% be careful! this does not result an atom but a predicate.
+
+:- export get_idxargs_normargs/4, get_idxargs_normargs/5.
+get_idxargs_normargs(IndexSet,InputArgs,ResultIndexArgs,ResultNormArgs) :-
+	get_idxargs_normargs(0,IndexSet,InputArgs,ResultIndexArgs,ResultNormArgs).
+%% get_idxargs_normargs(0,[4,5],[X1,X5,X6,X2,X4,X3],ResultIdxArgs,ResultNormArgs).
+%% ResultIndexArgs = [X2,X4]
+%% ResultNormArgs = [X1,X5,X6,X3]
+get_idxargs_normargs(_,_,[],[],[]) :- !.
+get_idxargs_normargs(N,IndexSet,InputArgs,ResultIndexArgs,ResultNormArgs) :-
+%	[Number|NumberT] = RearrangedIdxArgOrderSet,
+	[Arg|ArgT] = InputArgs,
+	N1 is N+1,
+	!,
+	(nth0(_,IndexSet,N1) ->		% If this arg is for indexing
+%		RearrangedIdxArgOrderSet = NumberT,	%  TODO optimization
+		get_idxargs_normargs(N1,IndexSet,ArgT,SubresultIdxArgs,ResultNormArgs),
+		append([Arg],SubresultIdxArgs,ResultIndexArgs)
+	;
+		get_idxargs_normargs(N1,IndexSet,ArgT,ResultIndexArgs,SubresultNormArgs),
+		append([Arg],SubresultNormArgs,ResultNormArgs)
+	).
+	
+:- export get_indexrule_head_name/3. 
+get_indexrule_head_name(MtindexFunctor, IndexSet,ResultAuxIndexRuleHeadName) :-
+	concat_atom([MtindexFunctor,'_index_',IndexSet],ResultAuxIndexRuleHeadName).
+%	writeln(['get_idx_rule ResultAuxIndexRuleHeadName',ResultAuxIndexRuleHeadName]).
+
+
+
+%% get_nonvar_check([1,2,3],[x1,x5,x6,x2,x4,x3],Result).
+%% Result = (nonvar(x1) ; nonvar(x5) ; nonvar(x6))
+:- export get_nonvar_check/3.
+:- dynamic get_nonvar_check/3.
+get_nonvar_check([],_Args,[]).
+get_nonvar_check(ArgOrderSet, Args, Result) :- 
+	writeln(['get_nonvar_check(',ArgOrderSet, Args, Result]),
+	ArgOrderSet = [Num|NumT],
+	writeln(['::calling get_nth_element(',Args, Num, Arg]),
+	trace,
+	get_nth_element(Args, Num, Arg),
+	get_nonvar_check_list(NumT, Args, nonvar(Arg), Result).
+
+:- export get_nonvar_check_list/4.
+get_nonvar_check_list([], _Args, ResultIn, ResultIn).
+get_nonvar_check_list(ArgOrderSet, Args, ResultIn, ResultOut) :-
+	writeln(['get_nonvar_check_list(',ArgOrderSet, Args, ResultIn, ResultOut]),
+	ArgOrderSet = [Num|NumT],
+	writeln(['::calling get_nth_element(',Args, Num, Arg]),
+	get_nth_element(Args, Num, Arg),
+	ResultIn1 = (ResultIn;nonvar(Arg)),
+	get_nonvar_check_list(NumT,Args,ResultIn1,ResultOut).
+	
+	
+
+:- export get_indexrule_body/4.
+%% Get an index rule body. 
+%% Should be provided with a set of arguments order numbers -> [1,5,6]
+%% get_indexrule_body([1,5,6],pb, [x1,x2,x3,x4,x5,x6], Result).
+%% Result = (pb(x1,_h349,_h345,_h341,x5,x6)  ','  
+%%		x2 = _h349  ','  
+%%		x3 = _h345  ','  
+%%		x4 = _h341)
+get_indexrule_body(IndexSet,NewBaseName,OriginalArgs,Result) :-
+	%writeln(get_indexrule_body(IndexSet,NewPredName,OriginalArgs,Result))
+	get_indexrule_newvars(0,IndexSet,OriginalArgs,NewArgs),
+	NewBasePred =.. [NewBaseName|NewArgs],	
+	get_indexrule_assign_to_newvar(0,IndexSet,OriginalArgs,NewArgs,AssignBodyList),
+	NewBody = (NewBasePred,AssignBodyList),
+	Result = NewBody.	
+
+:- export get_indexrule_newvars/4.
+%% Get a list of arguments for index rule.
+%% Indexed arg use original argument. ex) X2, X4
+%% Non-indexed arg is replaced new variable. ex) XX1,XX3,XX5,XX6
+%% get_indexrule_newvars(0,[2,4],[X1,X2,X3,X4,X5,X6],Result).
+%% Result = [XX1,X2,XX3,X4,XX5,XX6]
+get_indexrule_newvars(_,_,[],[]) :- !.
+get_indexrule_newvars(N,IndexSet,InputArgs,Result) :-
+	[Arg|ArgT] = InputArgs,
+	N1 is N+1,
+	!,
+	(
+		%% Check whether this argument ('N'th argument) 
+		%% is in the arg order set 
+		nth0(_,IndexSet,N1) ->	
+			% If this arg is for indexing
+			get_indexrule_newvars(N1,IndexSet,ArgT,SubResult),
+			%% X2, use original
+			append([Arg],SubResult,Result)		
+		;
+			% else if this argument is non-indexed
+			get_indexrule_newvars(N1,IndexSet,ArgT,SubResult),
+			%% XX1, set a new arg.
+			append([_],SubResult,Result)	
+	).
+
+:- export get_indexrule_assign_to_newvar/5.
+%% Get assigning terms for new vars. 
+%% It's a part of index rule body.
+%% get_indexrule_assign_to_newvar( 0,	%% N - index cursor of the arg order set
+%				[2,4],	%% argument order set
+%				[X1,X2,X3,X4,X5,X6],	%% original arguments
+%				[XX1,X2,XX3,X4,XX5,XX6], %% mixed new arguments
+%				Result ).
+%% Result = ( XX1=X1  ','  XX3=X3  ','  XX5=X5  ','  XX6=X6)
+get_indexrule_assign_to_newvar(_,_,[],_,[]).
+get_indexrule_assign_to_newvar(N,IndexSet,OriginalArgs,NewArgs,Result) :- 
+	OriginalArgs = [OrgArg|OrgArgT],
+	NewArgs = [NewArg|NewArgT],		
+	N1 is N+1,
+	!,
+	%% Check whether this argument ('N'th argument) is 
+	%% in the arg order set
+	(nth0(_,IndexSet,N1) ->	
+		% If this arg is for indexing
+		get_indexrule_assign_to_newvar(N1,IndexSet,OrgArgT,NewArgT,SubResult),
+		%% Do not put assignment (do nothing)
+		Result = SubResult			
+	;
+		%% This arg is not indexed argument 
+		%% - need an assignment for tabling
+		get_indexrule_assign_to_newvar(N1,IndexSet,OrgArgT,NewArgT,SubResult),
+		%% Put assignment XX1=X1
+		((SubResult = []) ->
+			%% If it's the end of the process.
+			%% OrgArgs are Index Rule's Args
+			%% New Args are Base Fact's Args
+			Result = (OrgArg=NewArg)	
+		;
+			Result = ( (OrgArg=NewArg) , SubResult )	
+		)
+	).
+
+	
+
+
+

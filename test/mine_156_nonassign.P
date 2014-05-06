@@ -1,0 +1,35 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+
+#define B156
+
+
+
+#ifdef B156
+%% base 1,5,6
+(:-dynamic index_156 / 6).
+(:-dynamic index_24 / 5).
+(:-dynamic index_3 / 4).
+(:-table index_156 / 6  as  subsumptive).
+(:-table index_24 / 5  as  subsumptive).
+(:-table index_3 / 4  as  subsumptive).
+
+index_156(X1,X5,X6,X2,X4,X3) :- p_6_newbase_156243(X1,X2,X3,X4,X5,X6).
+(index_24(X2,X4,X1,X5,X6) :- p_6_newbase_156243(X1,X2,X3,X4,X5,X6).
+(index_3(X3,X1,X5,X6) :- p_6_newbase_156243(X1,X2,X3,X4,XX5,X6).
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X1) -> index_156(X1,X5,X6,X2,X4,X3)  ';'
+  nonvar(X2) -> index_24(X2,X4,X1,X5,X6), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)  ';'
+  nonvar(X3) -> index_3(X3,X1,X5,X6), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)
+  ).
+#endif
+
+?- [newbase10k_123456].
+
+#ifdef B156
+(?-index_156(_,_,_,_,_,_)).
+(?-index_24(_,_,_,_,_)).
+(?-index_3(_,_,_,_)).
+#endif
+

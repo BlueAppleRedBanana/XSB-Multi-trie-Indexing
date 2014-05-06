@@ -1,0 +1,20 @@
+?- [mtindex], shell('touch data10k.P'), xsb_profiling:profile_unindexed_calls(on), xsb_profiling:profile_call(load_dyn(data10k)).
+
+?- 
+%listing(p), 
+listing(p_6_mtindex_156243), 
+listing(p_6_mtindex_156243_6_index_156), 
+listing(p_6_mtindex_156243_6_index_24),
+listing(p_6_mtindex_156243_6_index_3).
+
+?- 
+statistics.
+
+%?- 
+%statistics.
+
+%% I don't know why it does not work.
+%% after the cursor returned to user, 
+%% manually asking ?- p(X,b3,c3,d3,e3,f3) works correctly.
+%?- p(X,b3,c3,d3,e3,f3).	
+

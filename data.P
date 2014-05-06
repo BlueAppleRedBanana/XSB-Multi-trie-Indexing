@@ -1,0 +1,9 @@
+:- export(p/6).
+:- dynamic(p/6).
+:- export(mtindex/3).
+:- dynamic(mtindex/3).
+:- mtindex(p/6,trie,[[1,5,6],[2,4],[3]]).
+p(a1,b1,c1,d1,e1,f1).
+p(a2,b2,c2,d2,e2,f2).
+p(a3,b3,c3,d3,e3,f3).
+

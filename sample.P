@@ -1,0 +1,5 @@
+?- tell('sample_idx.P').
+?- write(s(100001930,1,'''physical entity''',n,1,0)).
+?- write_prolog((:-mtindex(s/6,trie,[[1,2,3]]))).
+%?- read_canonical((:-mtindex(s/6,trie,[[1,2,3]]))).
+?- told.

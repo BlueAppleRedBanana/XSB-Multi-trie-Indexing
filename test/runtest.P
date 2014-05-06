@@ -1,0 +1,220 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+% #define HASH	
+% #define TRIE
+% #define MULTI_TRIE
+#define GROUP 1000
+#define REPEAT 30
+
+#define PSTART 1
+#define PEND 6
+
+% #define LOAD_STATIC	%% cannot be used with auto test as retractall does not work on static.
+
+:- import run/5 from testquery.
+:- import concat_atom/2 from string.
+:- import nth0/3, flatten/2 from lists.
+
+:- import
+	length/2,
+	append/3,
+	member/2
+   from basics.
+
+:- import runp_num/5 from testquery.
+
+?- writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%').
+?- writeln('%%								%%').
+?- writeln('%%	Multi-trie indexing test				%%').
+?- writeln('%%								%%').
+?- writeln('%%	Indexing Types						%%').
+?- writeln('%%		Type 1: Hash tabling				%%').
+?- writeln('%%		Type 2: With single-trie indexing		%%').
+?- writeln('%%		Type 3: With multi-trie indexing		%%').
+?- writeln('%%								%%').
+?- writeln('%%	Querying cases						%%').
+?- writeln('%%		Case 1: Variable in the last argument of 	%%').
+?- writeln('%%			the query				%%').
+?- writeln('%%		Case 2: Variable in the 1st argument of		%%').
+?- writeln('%%			the query				%%').
+?- writeln('%%								%%').
+?- writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%').
+?- writeln('').
+?- writeln('').
+?- writeln('').
+
+
+?- [testquery]. 
+
+%% run test for hash and single trie indexing
+#ifdef HASH
+?- runtest(1,10000,GROUP,REPEAT).
+#endif
+
+%% run test for multi trie indexing
+#ifdef MULTI_TRIE
+?-runmttest(1,10000,GROUP,REPEAT).
+#endif
+
+
+runhashtest(Start,End,Group,Repeat) :-
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 1: Hash tabling'),
+	runtarget('data10k_hash.P',Start,End,Group,Repeat).
+runtrietest(Start,End,Group,Repeat) :-
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 2: With single-trie indexing'),
+	runtarget('data10k_trie.P',Start,End,Group,Repeat).
+runmttest(Start,End,Group,Repeat) :-
+	call(xsb_profiling:profile_unindexed_calls(on)),
+	assert(library_directory('../')), assert(library_directory('./')), consult('../mtindex.P'),
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 3: With multi-trie indexing'),
+	xsb_profiling:profile_call(runtarget('data10k_mt.P',Start,End,Group,Repeat)).
+
+runhashtestp :- runhashtestp(PSTART,PEND,REPEAT).
+runtrietestp :- runtrietestp(PSTART,PEND,REPEAT).
+runmttestp :- runmttestp(PSTART,PEND,REPEAT).
+runhashtestp(Start,End,Repeat) :-
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 1: Hash tabling'),
+	runtargetp('datap4hash.P',Start,End,Repeat).
+runtrietestp(Start,End,Repeat) :-
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 2: With single-trie indexing'),
+	runtargetp('datap4trie.P',Start,End,Repeat).
+runmttestp(Start,End,Repeat) :-
+	call(xsb_profiling:profile_unindexed_calls(on)),
+	assert(library_directory('../')), assert(library_directory('./')), consult('../mtindex.P'),
+	writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'),
+	writeln('%%	Type 3: With multi-trie indexing'),
+	xsb_profiling:profile_call(runtargetp('datap4mt.P',Start,End,Repeat)).
+
+runtest(Start,End,Group,Repeat) :-
+#ifdef HASH
+	runhashtest(Start,End,Group,Repeat),
+#endif
+#ifdef TRIE
+	runtrietest(Start,End,Group,Repeat),
+#endif
+	true.
+
+runtarget(Target,IndexDirective,Start,End,Group,Repeat) :-
+	assert(IndexDirective),
+	runtarget(Target,Start,End,Group,Repeat).
+
+runtarget(Target,Start,End,Group,Repeat) :-
+	writeln('Loading data...'),
+	concat_atom(['touch ',Target],TargetShell),
+	shell(TargetShell),
+#ifdef LOAD_STATIC	
+	consult(Target), %% data10k_mt.P
+#ifdef MULTI_TRIE
+	trace,
+#endif
+#else
+	load_dyn(Target),
+#endif
+	writeln('load complete'),
+	statistics,
+	runtarget(Start,End,Group,Repeat).
+
+#define Q12345F [a,b,c,d,e,_F]
+#define Q23456A [_A,b,c,d,e,f]
+#define Q1BCDEF [a,_B,_C,_D,_E,_F]
+#define Q24ACEF [_A,b,_C,d,_E,_F]
+#define Q6ABCDE [_A,_B,_C,_D,_E,f]
+#define Q135BDF [a,_B,c,_D,e,_F]
+#define Q246ACE [_A,b,_C,d,_E,f] 
+#define Q156 [a,_B,_C,_D,e,f]
+#define Q24 [_A,b,_C,d,_E,f]
+
+genargs(IndexSet,Result) :-
+	getargs(0,IndexSet,[a,b,c,d,e,f],Result).
+	
+%% getargs(0,[1,5,6],[a,b,c,d,e,f],Result).
+getargs(_,_,[],[]) :- !.
+getargs(N,IndexSet,InputArgs,Result) :-
+%	[Number|NumberT] = RearrangedIdxArgOrderSet,
+	[Alphabet|AlphabetT] = InputArgs,
+	N1 is N+1,
+	!,
+	(
+		nth0(_,IndexSet,N1) ->		% If this arg is for indexing
+%			RearrangedIdxArgOrderSet = NumberT,	%  TODO optimization
+			getargs(N1,IndexSet,AlphabetT,SubResult),
+			append([Alphabet],SubResult,Result)
+		;
+			getargs(N1,IndexSet,AlphabetT,SubResult),
+			append([_Var],SubResult,Result)
+	).
+
+runargs :-
+	Call = runargs([[1,5,6],[2,4],[3],[1,2,3,4,5],[2,3,4,5,6]],1,10000,2000,20),
+	writeln(Call),
+	Call.
+runargs([],_,_,_,_).
+runargs(IndexSets,Start,End,Group,Repeat) :-
+	IndexSets = [H|T],
+	genargs(H,Args),
+	Query1 = run(p/6,Args,(Start,End),(Group,Repeat),T0),
+	writeln(Query1),
+	Query1,
+	writeln('TotalTime:'=T0),nl,
+	runargs(T,Start,End,Group,Repeat).
+	
+runtarget(Start,End,Group,Repeat) :-
+	writeln(''),
+	writeln('%%	Querying Case 1: Variable in the last argument...'),
+	Query1 = run(p/6,Q12345F,(Start,End),(Group,Repeat),T0),
+	writeln(Query1),
+	Query1,
+	writeln('TotalTime:'=T0),
+	writeln(''),
+	writeln('%%	Querying Case 2: Variable in the 1st argument...'),
+	Query2 = run(p/6,Q23456A,(Start,End),(Group,Repeat),T1),
+	writeln(Query2),
+	Query2,
+	writeln('TotalTime:'=T1),
+	writeln('Cleaning...'),retractall(p),statistics.
+
+runtargetp(Target,Start,End,Repeat) :-
+	writeln('Loading data...'),
+	concat_atom(['touch ',Target],TargetShell),
+	shell(TargetShell),
+#ifdef LOAD_STATIC	
+	consult(Target), %% data10k_mt.P
+#ifdef MULTI_TRIE
+	trace,
+#endif
+#else
+	load_dyn(Target),
+#endif
+	writeln('load complete'),
+	statistics,
+	runtargetp_set(p/4,[[4],[1],[2,3,4],[1,2,3]],Start,End,Repeat,Time),
+	writeln('RUN SET TOTAL TIME:'=Time).
+
+runtargetp_set(_Functor/_Arity,[],_Start,_End,_Repeat,0).
+runtargetp_set(Functor/Arity,[VarIndicesH|VarIndicesT],Start,End,Repeat,T) :-
+	RunSet = runp_num(Functor/Arity,VarIndicesH,(Start,End),Repeat,T0),
+	call(RunSet),
+	writeln(RunSet),
+	writeln('TotalTime:'=T0),
+	runtargetp_set(Functor/Arity, VarIndicesT, Start,End,Repeat,T1),
+	T is T0 + T1.
+	
+runtargetp(Start,End,Repeat) :-
+	writeln(''),
+	writeln('%%	Querying Case 1: Variable in the last argument...'),
+	Query1 = runp_num(p/4,[4],(Start,End),Repeat,T0),
+	writeln(Query1),
+	Query1,
+	writeln('TotalTime:'=T0),
+	writeln(''),
+	writeln('%%	Querying Case 2: Variable in the 1st argument...'),
+	Query2 = runp_num(p/4,[1],(Start,End),Repeat,T1),
+	writeln(Query2),
+	Query2,
+	writeln('TotalTime:'=T1),
+	writeln('Cleaning...'),retractall(p),statistics.

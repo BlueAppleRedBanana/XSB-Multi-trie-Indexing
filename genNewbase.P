@@ -1,0 +1,62 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+#define REORDER_BASE
+
+:- import concat_atom/2 from string.
+:- import '_$_$_mtindex'/5 from termExp.
+:- import rearrange_args_list/3 from genMtindexRule.
+
+:- export get_newbase/3, get_newbase/4, get_newbasename/3.
+
+
+
+%%%%%% CONVERT TO NEW BASE FACT %%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%% get_newbase(p(a,b,c,d,e,f),[[1,5,6],[2,4],[3]],NewBase),
+%% NewBase = p_6_newbase_156243(a,b,c,d,e,f)
+
+
+%%% TODO : use get_newbase/3 to prevent from generating name repeatly
+%%% You can save it into _$_$_mtindex/5 and reuse it. 
+%%% Every base pred conversion will use rearrange_args_list which is wasteful.
+
+#ifdef REORDER_BASE
+get_newbase(OriginalHead, IndexArgNumbers, NewBase) :-
+	OriginalHead =.. [_|Args],
+	functor(OriginalHead,Functor,Arity),
+	(
+		'_$_$_mtindex'(Functor,Arity,NewBaseName,IndexArgNumbers,_) -> 
+			get_newbase(NewBaseName, Args, IndexArgNumbers, NewBase)
+		; 
+			get_newbasename(OriginalHead,IndexArgNumbers,NewBaseName),
+			get_newbase(NewBaseName, Args, IndexArgNumbers, NewBase)
+	).
+#else
+%% it does not touch arg orders in newbase fact anymore
+%% if REORDER_BASE is not defined. 
+get_newbase(OriginalHead, IndexArgNumbers, NewBase) :-
+	OriginalHead =.. [_|Args],
+	functor(OriginalHead,Functor,Arity),
+	(
+		'_$_$_mtindex'(Functor,Arity,NewBaseName,IndexArgNumbers,_) -> 
+			NewBase =.. [NewBaseName|Args]
+		; 
+			get_newbasename(OriginalHead,IndexArgNumbers,NewBaseName),
+			NewBase =.. [NewBaseName|Args]
+	).
+#endif
+	
+get_newbase(NewBaseName, Args, IndexArgNumbers, NewBase) :- 
+#ifdef REORDER_BASE
+	rearrange_args_list(IndexArgNumbers, Args, RearrangedArgs),
+	NewBase =.. [NewBaseName|RearrangedArgs].
+#else
+	NewBase =.. [NewBaseName|Args].
+#endif
+
+
+get_newbasename(OriginalHead,IndexArgNumbers,Result) :-
+	functor(OriginalHead,Functor,Arity),
+	concat_atom([Functor,'_',Arity,'_newbase_',IndexArgNumbers],Result).	
+
+

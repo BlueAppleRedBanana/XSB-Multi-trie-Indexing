@@ -1,0 +1,105 @@
+
+Problem: Indexing of *base facts*
+         - on different argument orderings using tries
+	 - multiple indices using hash for static base facts
+	   (probably not that useful)
+
+I. Hash indexing, static code
+=============================
+
+Suppose we have a predicate p/3, which we want to index on the args 1 and 2.
+Arg 1 is given for free. For Arg2, we can do as follows.
+Let all the facts be in p_base/3.
+
+Create an index on arg2 as folows:
+
+    :- table p_ind2/2.
+    p_ind2(X2,X1) :- p_base(X1,XX2,_), XX2=X2.
+
+If we call p_ind2(_,_), this will create the index and p_base is scanned
+only once for that. Tabling can be variant here.
+
+Then we define the predicate p/3, which will be used by the actual
+programs, as follows:
+
+   p(X1,X2,X3) :-
+       (
+         nonvar(X1) -> p_base(X1,XX2,XX3), X2=XX2, X3=XX3
+         ;
+         nonvar(X2) -> p_ind2(X2,X1), %% index lookup
+	               p_base(X1,XX2,XX3), X2=XX2, X3=XX3
+       ).
+
+II. Trie indexing
+=================
+
+For tries, we can index both on multiple combinations of arguments and also
+on prefix arguments.
+
+Method: Suppose we have a predicate, p/6 and want indices on
+        Args: 1+5+6
+	      2+4
+	      3
+	Then:
+	    Create a base relation p_base/6 which will effectively have
+	    this order of arguments:  1,5,6,2,4,3
+	    p_base is trie-indexed.
+	    Create indices as before:
+
+	    The index on 1,5,6: p_base is already trie-indexed on those
+	              on 2,4: p_ind24/5,
+		      on 3: p_ind3/4
+
+	    %% subsumptive tabling lets us do indexing on prefix arguments
+	    :- table p_ind24/5, p_ind3/4
+	       as subsumptive.
+
+	    p_ind24(X2,X4,X1,X5,X6) :- p_base(XX1,XX5,XX6,X2,X4,_),
+	                               XX1=X1, XX5=X5, XX6=X6.
+	    p_ind3(X3,X1,X5,X6)     :- p_base(XX1,XX5,XX6,_,_,X3),
+	                               XX1=X1, XX5=X5, XX6=X6.
+	                               
+	    
+
+	   Essentially, p_ind24 maps the key X2,X4 to the existing X1,X5,X6.
+	                p_ind3 maps the key X3 to the key X1,X5,X6.
+
+	-> WHEN IT CHANGES ARGUMENTS BASED ON P_BASE
+	pb(X1,X5,X6,X2,X4,X3)
+	pb(B1,B2,B3,B4,B5,B6)
+	p(B1,B4,B6,B5,B2,B3) :- %% order of argument
+	   		
+	pi24(X2,X4,X1,X5,X6) :- 
+		pi24(B4,B5,B1,B2,B3),
+		X2=B4,X4=B5,X1=B1,X5=B2,X6=B3,
+	pi24(B4,B5,B1,B2,B3) :-
+		pb(BB1,BB2,BB3,B4,B5,_),
+		BB1=B1, BB5=B5, BB6=B6.
+	pi3(X3,X1,X5,X6) :- pi3(B6,B1,B2,B3).
+	pi3(B6,B1,B2,B3) :-
+		pb(BB1,BB2,BB3,_,_,B6),
+		BB1=B1, BB2=B2, BB3=B3.
+	
+							
+	   
+	   
+
+Now, define the originally intended p/6 as follows:
+
+       p(X1,X2,X3,X4,X5,X6) :-
+           (
+	     nonvar(X1) ->
+		   p_base(X1,X5,X6,XX2,XX4,XX3),
+		   XX2=X2, XX4=X4, XX3=X3
+	    ;
+	     nonvar(X2) ->
+	           p_ind24(X2,X4,XX1,XX5,XX6),
+		   p_base(XX1,XX5,XX6,X2,X4,XX3),
+		   XX1=X1, XX5=X5, XX6=X6, XX3=X3
+	    ;
+	     nonvar(X3) ->
+	           p_ind3(X3,XX1,XX5,XX6),
+		   p_base(XX1,XX5,XX6,XX2,XX4,X3),
+		   XX1=X1, XX5=X5, XX6=X6, XX2=X2, XX4=X4
+           ).
+

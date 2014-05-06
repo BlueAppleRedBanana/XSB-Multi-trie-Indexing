@@ -1,0 +1,293 @@
+RESEARCH
+
+%%%% 1. term_expansion's new rule assertion has shown weird argument binding.
+I've talked with Spyros Hadjichristodoulou, a phD candiate managing XSB, and we could not find the solution yet. 
+It may be a bug in term_expansion. 
+
+in rev 85 in http://xsb-multi-trie-indexing.googlecode.com/svn/branches/mtindex-weird.
+
+try [run].
+XSB Version 3.3.7 (Pignoletto) of August 12, 2012
+
+| ?- listing(p_6_mtindex_156243_6_index_123).
+p_6_mtindex_156243_6_index_123(A,B,C,D,E,F) :-
+    p_6_newbase_156243(A,B,C,A,D,F), <- incorrect
+    A = D,
+    D = E,
+    F = F.
+
+yes
+
+Then, re-run XSB and type [data_dbg]. and check it works. 
+XSB Version 3.3.7 (Pignoletto) of August 12, 2012
+
+| ?- listing(p_6_mtindex_156243_6_index_123).
+p_6_mtindex_156243_6_index_123(A,B,C,D,E,F) :-
+    p_6_newbase_156243(A,B,C,G,H,I),    <- Correct! 
+    G = D,
+    H = E,
+    I = F.
+
+data_dbg is definitely has same result from all term_expansion expanded_terms in [run].
+Samething happens in XSB 3.4
+Now this issue is avoided by putting index rules into _idx file and reload that file
+when term_expansion meets end_of_file
+
+
+%%%% 2. term_expansion's weird work - and it seems to work differently to assert/1
+
+%%%% 2.1
+in rev78, mtindex.P, line 177
+Result = [(?- consult(IdxFile))] works.
+while assert(consult(IdxFile)) is invalid one. 
+
+%%%% 2.2 
+However, Result = [(?- consult(IdxFile)))] does not work when it is loaded dynamically
+
+in rev80, test/data10kmt.P use ?- load_dyn(data10). instead of [data10].
+run test/runtest.P as [runtest].
+you can see the warning.
+++Error[XSB/Runtime/P]: [Existence (No file/module data10 exists)]  in arg 1 of predicate consult/1
+
+
+%%%% 3. term_expansion seems it asserts rules in the end of the query.
+in rev81.
+
+in run.P
+?- [mtindex], shell('touch data.P'), load_dyn(data), p(X,b3,c3,d3,e3,f3).                           
+fails, even the loading idx file is completed.
+However, after the query above ends, re-querying p(X,b3,c3,d3,e3,f3) works correctly.
+
+in the case of static loading, it does not even 'query'
+in run.P
+?- [mtindex], shell('touch data.P'), [data], p(X,b3,c3,d3,e3,f3). 
+does not work(does not query p(X,b3,c3,d3,e3,f3) but get exception.
+[Module data_idx compiled, cpu time used: 0.0200 seconds]
+[data_idx loaded]
+   (0) Call: xpp_is_on() ?  
+   (0) Fail: xpp_is_on() ? 
+   (1) Call: seen() ? s
+   (1) Exit: seen() ? 
+   (2) Call: check_xpp_process_status('./data.P',skip) ? s
+   (2) Exit: check_xpp_process_status('./data.P',skip) ? 
+   (4) Call: filestack_pop(_h13426) ? s
+   (4) Fail: filestack_pop(_h13426) ? 
+   (2) Redo: check_xpp_process_status('./data.P',skip) ? s
+   (2) Fail: check_xpp_process_status('./data.P',skip) ? 
+   (1) Redo: seen() ? s
+   (1) Fail: seen() ? 
+   (6) Call: xsb_thread_self(_h2239) ? s
+   (6) Exit: xsb_thread_self(0) ? 
+   (8) Call: get_exception_ball(0,_h2268) ? s
+[ load module subsumes ]
+
+
+%%%% 4. :- mtindex and the target facts should be in the same file.
+in rev83.
+
+consult test/runtest.P and we can see there's not target facts are loaded. 
+as term_expansion only works on directives and rule definitions (into compiler), 
+term_expansion cannot catch ?- query. 
+
+?- consult(data10) in data10kmt.P will be ignored as it is done during compiling. 
+
+
+%%%% 4.1. If we want to generate the mtindex rule first, and then load facts from another file,
+it is also a problem because we need to generate table again using p(_,_,_,_,_,_) everytime new facts come.
+
+
+%%%% 5. Target predicate should be retracted and re-exported.
+
+p/6 should be retracted and re-exported for mtindex.
+If it is not, listing(p) will not work while the program runs anyway.
+For preventing from possible error, 
+it is recommened that the predicate export and dynamic directive 
+should be cleaned and defined newly. 
+
+
+
+
+%%%% 6. Test result
+
+You can test by consulting test/runtest.P
+It uses 10k p/6 facts and it queries 10k query which is grouped by 5000 queries and repeat each query 5 times. 
+It compares the case variable in the first and the last argument in each three different indexing types (Hash, Trie, Multi-trie).
+
+
+
+| ?- [runtest].
+[runtest loaded]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%								%%
+%%	Multi-trie indexing test				%%
+%%								%%
+%%	Indexing Types						%%
+%%		Type 1: Hash tabling				%%
+%%		Type 2: With single-trie indexing		%%
+%%		Type 3: With multi-trie indexing		%%
+%%								%%
+%%	Querying cases						%%
+%%		Case 1: Variable in the last argument of 	%%
+%%			the query				%%
+%%		Case 2: Variable in the 1st argument of		%%
+%%			the query				%%
+%%								%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+[mtindex loaded, cpu time used: 0.0040 seconds]
+[listProcessing loaded]
+[genMtindexRule loaded]
+[directiveUtil loaded]
+[genNewbase loaded]
+[testquery loaded]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 1: Hash tabling
+Loading data...
+Loading data...
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10ki.P dynamically loaded, cpu time used: 0.0880 seconds]
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h542],(1  ','  10000),(1000  ','  5),_h562)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0080]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0040]
+TotalTime: = 0.2840
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h1197026,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h1197036)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,2.2360]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,2.2160]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,2.1160]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,2.0000]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,1.9680]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,2.0680]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,1.6120]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,1.7480]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,1.0280]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.5480]
+TotalTime: = 17.5400
+Cleaning...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 2: With single-trie indexing
+Loading data...
+++Warning[XSB]: [Compiler] data10kst : export directive ignored.
+[/home/jin/XSB/xsb-multi-trie-indexing/test/data10kst.P dynamically loaded, cpu time used: 0.7280 seconds]
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h2592030],(1  ','  10000),(1000  ','  5),_h2592050)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0720]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0120]
+TotalTime: = 0.4600
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h5183967,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h5183977)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,2.8200]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,2.5370]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,2.1880]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,1.8320]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,1.5360]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,1.2320]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,1.0400]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.7360]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.5640]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.2560]
+TotalTime: = 14.7410
+Cleaning...
+[Compiling /home/jin/XSB/xsb-multi-trie-indexing/test/data10kmt]
+
+
+
+[Compiling ./data10kmt_idx]
+[Module data10kmt_idx compiled, cpu time used: 33.8060 seconds]
+
+++Warning[XSB]: [Runtime/C] p/6 (type 1) had been defined in module: usermod
+[data10kmt_idx loaded, cpu time used: 0.0520 seconds]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Type 3: With multi-trie indexing
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h59],(1  ','  10000),(1000  ','  5),_h79)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.2480]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.2680]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0120]
+TotalTime: = 0.9480
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h5664130,b,c,d,e,f],(1  ','  10000),(1000  ','  5),_h5664140)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,5,Time:,0.2880]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,5,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,5,Time:,0.5240]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,5,Time:,0.2880]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,5,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,5,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,5,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,5,Time:,0.3200]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,5,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,5,Time:,0.0080]
+TotalTime: = 1.7280
+
+yes
+
+
+
+
+%%%% 7. static loading will ignore term_expansion
+
+in rev90.
+[mtindex1] will discard term_expansion as it is not-used rule. 
+only :- export term_expansion/2 directive will keep term_expansion from being discarded.
+
+-> it is figured out that :- export directive will put rules into module, not usermod. 
+
+
+%%%% 8. term_expansion's assertion is done only after the file input is finished.
+in rev99.
+for example, 
+assume that usermod has two diffrent term_expansion
+
+#1 term_expansion catches :-mtindex directive and returns many rules
+term_expansion(':-'(mtindex(Functor/Arity,trie,IndexArgOrderSets)),Result)
+
+#2 term_expansion catches end_of_file and want to see the rules asserted by #1
+term_expansion(end_of_file, Result)
+
+Those term_expansions are triggered by [data]. 
+in the #1, even though Result returns many rules, 
+in the #2, those are not listed on listing/0.
+
+Only after all input is finished, (data.P was processed and got outside of consulting [data]. procedure) 
+by listing/0, you can see new rules are asserted correctly while those did not appear during #2.
+
+-> This is because the term_expansion is not asserting result, but passing result into XSB compiler. 
+-> So after all term_expansion works are done, the result will be compiled and loaded into XSB.
+-> it's not recursive, but consequtive work.
+
+
+
+
+
+

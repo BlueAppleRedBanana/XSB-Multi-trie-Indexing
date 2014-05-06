@@ -1,0 +1,368 @@
+%%%% QUERY with 156, 24, 3
+
+[mine1 baseindex all]
+[testquery loaded]
+run(p / 6,[a,_h124,_h120,_h116,e,f],(1  ','  10000),(2000  ','  20),_h146)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2800]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2120]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1240]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.1200]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0520]
+TotalTime: = 0.7880
+
+run(p / 6,[_h7972399,b,_h7972391,d,_h7972383,_h7972379],(1  ','  10000),(2000  ','  20),_h7972417)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2680]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2120]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1680]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.4920]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0480]
+TotalTime: = 1.1880
+
+run(p / 6,[_h5083715,_h5083711,c,_h5083703,_h5083699,_h5083695],(1  ','  10000),(2000  ','  20),_h5083733)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2800]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.1960]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1520]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0520]
+TotalTime: = 0.7720
+
+
+[mine1 baseindex 156]
+testquery loaded]
+run(p / 6,[a,_h125,_h121,_h117,e,f],(1  ','  10000),(2000  ','  20),_h147)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2760]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2080]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1520]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0440]
+TotalTime: = 0.7840
+
+run(p / 6,[_h7973374,b,_h7973366,d,_h7973358,_h7973354],(1  ','  10000),(2000  ','  20),_h7973392)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2480]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2160]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1520]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.5280]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0440]
+TotalTime: = 1.1880
+
+run(p / 6,[_h5224652,_h5224648,c,_h5224640,_h5224636,_h5224632],(1  ','  10000),(2000  ','  20),_h5224670)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2440]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.1960]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1720]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0440]
+TotalTime: = 0.7440
+
+
+
+[mine1 baseindex 24]
+[testquery loaded]
+run(p / 6,[a,_h124,_h120,_h116,e,f],(1  ','  10000),(2000  ','  20),_h146)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2800]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2200]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1440]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0440]
+TotalTime: = 0.7920
+
+run(p / 6,[_h8030708,b,_h8030700,d,_h8030692,_h8030688],(1  ','  10000),(2000  ','  20),_h8030726)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,1.0200]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2080]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1480]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.5120]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0480]
+TotalTime: = 1.9360
+
+run(p / 6,[_h5342006,_h5342002,c,_h5341994,_h5341990,_h5341986],(1  ','  10000),(2000  ','  20),_h5342024)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,1.5680]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,1.4360]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,1.2600]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.9160]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.5200]
+TotalTime: = 5.7000
+
+[mine1 baseindex3]
+[testquery loaded]
+run(p / 6,[a,_h125,_h121,_h117,e,f],(1  ','  10000),(2000  ','  20),_h147)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.2640]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2080]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1280]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0480]
+TotalTime: = 0.7440
+
+run(p / 6,[_h8178883,b,_h8178875,d,_h8178867,_h8178863],(1  ','  10000),(2000  ','  20),_h8178901)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,2.4280]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,1.4640]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,1.3080]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.9400]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.5200]
+TotalTime: = 6.6600
+
+run(p / 6,[_h6996014,_h6996010,c,_h6996002,_h6995998,_h6995994],(1  ','  10000),(2000  ','  20),_h6996032)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.8120]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.2120]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1400]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0520]
+TotalTime: = 1.3080
+
+
+
+
+
+[kifer]
+
+[testquery loaded]
+run(p / 6,[a,_h124,_h120,_h116,e,f],(1  ','  10000),(2000  ','  20),_h146)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.1760]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.1440]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1000]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0360]
+TotalTime: = 0.5160
+
+run(p / 6,[_h3024930,b,_h3024922,d,_h3024914,_h3024910],(1  ','  10000),(2000  ','  20),_h3024948)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.1880]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.1320]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0400]
+TotalTime: = 0.5320
+
+run(p / 6,[_h6393869,_h6393865,c,_h6393857,_h6393853,_h6393849],(1  ','  10000),(2000  ','  20),_h6393887)
+Preparing queries...end.  Querying...[Query:,1,2000,Repeat:,20,Time:,0.1920]
+Preparing queries...end.  Querying...[Query:,2001,4000,Repeat:,20,Time:,0.1200]
+Preparing queries...end.  Querying...[Query:,4001,6000,Repeat:,20,Time:,0.1080]
+Preparing queries...end.  Querying...[Query:,6001,8000,Repeat:,20,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,8001,10000,Repeat:,20,Time:,0.0360]
+TotalTime: = 0.5480
+
+
+[testquery loaded]
+run(p / 6,[a,_h124,_h120,_h116,e,f],(1  ','  10000),(1000  ','  10),_h146)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0520]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5080
+
+run(p / 6,[_h15323868,b,_h15323860,d,_h15323852,_h15323848],(1  ','  10000),(1000  ','  10),_h15323886)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0800]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5360
+
+run(p / 6,[_h2744998,_h2744994,c,_h2744986,_h2744982,_h2744978],(1  ','  10000),(1000  ','  10),_h2745016)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5120
+
+
+
+%%%% Query with 12345 23456
+[kifer]
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h101],(1  ','  10000),(1000  ','  10),_h121)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1000]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0720]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0360]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5560
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h8684883,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h8684893)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0720]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0800]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5680
+Cleaning...
+
+
+[mine baseindex all]
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h101],(1  ','  10000),(1000  ','  10),_h121)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1880]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1520]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.1600]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1360]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.1160]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.5890]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0280]
+TotalTime: = 1.5970
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h2983984,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h2983994)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1920]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1640]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.1320]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.4600]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.1160]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.4360]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0800]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.4040]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0200]
+TotalTime: = 2.0640
+Cleaning...
+
+
+[kifer1]
+run(p / 6,[a,b,c,d,e,_h63],(1  ','  10000),(1000  ','  10),_h83)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0320]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.4920
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h5928316,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h5928326)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.0800]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0080]
+TotalTime: = 0.5520
+Cleaning...
+
+
+[mine1 baseindex 24]
+
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h196],(1  ','  10000),(1000  ','  10),_h216)
+Preparing queries...[ load module string ]
+end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1640]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1320]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.1200]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1000]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0160]
+TotalTime: = 0.8320
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h10443378,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h10443388)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1320]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1480]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1040]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0560]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0280]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0160]
+TotalTime: = 0.7920
+
+[mine1 baseindex 3]
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h63],(1  ','  10000),(1000  ','  10),_h83)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1600]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1480]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.1440]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1120]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0920]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0680]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0120]
+TotalTime: = 0.9040
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h3095704,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h3095714)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1440]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1400]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.1240]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1080]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.6920]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0600]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0200]
+TotalTime: = 1.4560
+Cleaning...
+
+[mine1 baseindex all 156243]
+%%	Querying Case 1: Variable in the last argument...
+run(p / 6,[a,b,c,d,e,_h63],(1  ','  10000),(1000  ','  10),_h83)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1280]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1240]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0960]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0880]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0520]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0440]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0240]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0120]
+TotalTime: = 0.6960
+
+%%	Querying Case 2: Variable in the 1st argument...
+run(p / 6,[_h10448295,b,c,d,e,f],(1  ','  10000),(1000  ','  10),_h10448305)
+Preparing queries...end.  Querying...[Query:,1,1000,Repeat:,10,Time:,0.1000]
+Preparing queries...end.  Querying...[Query:,1001,2000,Repeat:,10,Time:,0.1160]
+Preparing queries...end.  Querying...[Query:,2001,3000,Repeat:,10,Time:,0.0840]
+Preparing queries...end.  Querying...[Query:,3001,4000,Repeat:,10,Time:,0.1080]
+Preparing queries...end.  Querying...[Query:,4001,5000,Repeat:,10,Time:,0.0760]
+Preparing queries...end.  Querying...[Query:,5001,6000,Repeat:,10,Time:,0.0640]
+Preparing queries...end.  Querying...[Query:,6001,7000,Repeat:,10,Time:,0.0480]
+Preparing queries...end.  Querying...[Query:,7001,8000,Repeat:,10,Time:,0.0400]
+Preparing queries...end.  Querying...[Query:,8001,9000,Repeat:,10,Time:,0.0200]
+Preparing queries...end.  Querying...[Query:,9001,10000,Repeat:,10,Time:,0.0160]
+TotalTime: = 0.6720
+Cleaning...
+
+

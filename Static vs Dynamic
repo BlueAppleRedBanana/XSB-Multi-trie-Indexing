@@ -1,0 +1,21 @@
+By prof. David Warren.
+
+
+The difference between dynamic and static code:  
+
+Dynamic code is created by assert at runtime (load_dyn is just a read-assert loop).  
+Asserted code all goes into usermod (the default global module). Asserted code is shown by listing/0.  
+
+Static code is created loading a compiled .xwam file into XSB.  
+That code is “compiled”. 
+It can be in whatever module it’s defined in (:- export ??. causes the code to be put in a module of the filename; no :- export and the code goes into usermod.)  
+
+When you load by load_dyn, all your code is dynamic (modules are ignored by load_dyn; you should have gotten a warning message that the :- export directive was ignored.)  
+Since it is dynamic, it shows up in listing/0.  
+
+When you compile it, it isn’t dynamic, so you don’t see it in listing/0.  
+Also it goes into a module (the name of the file) and since the compiler assumes that you have defined term_expansion/2 in usermod, it won’t find it when it looks, and it won’t work.  
+So term_expansion/2 must be defined in a file that doe *not* have an :- export.  
+
+The “unused symbols” messages you see come from compiling a module.  
+The compiler knows that only exported predicates can be called, so if there is no way to (eventually) call a predicate defined in a module by calling some exported predicate, that predicate can never be called and is therefore “unused”.  That’s where that message comes from.

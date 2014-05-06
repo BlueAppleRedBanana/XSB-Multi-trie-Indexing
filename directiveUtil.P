@@ -1,0 +1,117 @@
+
+:- import length/2 from basics.
+   
+%%%%%%%% UTILS %%%%%%%%
+
+:- export get_export/2.
+get_export([],[]).
+get_export(RuleHeads,Result) :-
+	RuleHeads = [RuleHead|T],
+	functor(RuleHead,RuleName,Arity),
+	get_export(T,SubResult),
+	Result = [(:- export RuleName/Arity)|SubResult].
+get_export(RuleHead,Result) :-
+	functor(RuleHead,RuleName,Arity),
+	Result = (:- export RuleName/Arity).
+
+:- export get_dynamic/2.
+%% get_dynamic(
+%		[ p_6_mtindex_156243_index_123(X1,X5,X6,X2,X4,X3),
+%		  p_6_mtindex_156243_index_45(X2,X4,X1,X5,X6,X3),
+%		  p_6_mtindex_156243_index_6(X3,X1,X5,X6,X2,X4) ],
+%		Result).
+%% Result = [(:- dynamic p_6_mtindex_156243_index_123/6, ...]
+get_dynamic([],[]).
+get_dynamic(IndexRuleHeads,DynamicIndexRuleNames) :-
+	IndexRuleHeads = [H|T],
+	functor(H,_,Arity),
+	H =.. [IndexRuleName|_],
+	get_dynamic(T,SubResult),
+	DynamicIndexRuleNames = [(:- dynamic IndexRuleName/Arity)|SubResult]. 
+get_dynamic(RuleHead,Result) :-
+	functor(RuleHead,_,Arity),
+	RuleHead =.. [RuleName|_],
+	Result = (:- dynamic RuleName/Arity).
+
+
+:- export get_table/2.
+%% get_table(
+%		[ p_6_mtindex_156243_index_123(X1,X5,X6,X2,X4,X3),
+%		  p_6_mtindex_156243_index_45(X2,X4,X1,X5,X6,X3),
+%		  p_6_mtindex_156243_index_6(X3,X1,X5,X6,X2,X4) ],
+%		Result).
+%% Result = [(:- table p_6_mtindex_156243_index_123/6 as subsumptive), ...]
+get_table([],[]).
+get_table(IndexRuleHeads,TableIndexRuleHeadNames) :-
+	IndexRuleHeads = [H|T],
+	functor(H,_,Arity),
+	H =.. [IndexRuleName|_],
+	get_table(T, SubResult),
+	TableIndexRuleHeadNames = [(:- table IndexRuleName/Arity as subsumptive)|SubResult].
+get_table(RuleHead,Result) :-
+	functor(RuleHead,_,Arity),
+	Result = (:- table RuleHead/Arity as subsumptive).
+	
+:- export get_retractall/2.
+%% get_retractall(
+%		[ p_6_mtindex_156243_index_123(X1,X5,X6,X2,X4,X3),
+%		  p_6_mtindex_156243_index_45(X2,X4,X1,X5,X6,X3),
+%		  p_6_mtindex_156243_index_6(X3,X1,X5,X6,X2,X4) ],
+%		Result).
+%% Result = [(:- retractall(p_6_mtindex_156243_index_123)), ...]
+get_retractall([],[]).
+get_retractall(RuleHeads,Result) :-
+	RuleHeads = [H|T],
+	H =.. [RuleName|_],
+	get_retractall(T, SubResult),
+	Result = [(:- retractall(RuleName))|SubResult].
+get_retractall(RuleHead,Result) :-
+	RuleHead =.. [RuleName|_],
+	Result = (:- retractall(RuleName)).
+	
+	
+
+:- export get_arbitrary_queries/2.
+% get_arbitrary_queries(
+%		[ p_6_mtindex_156243_index_123(X1,X5,X6,X2,X4,X3),
+%		  p_6_mtindex_156243_index_45(X2,X4,X1,X5,X6,X3),
+%		  p_6_mtindex_156243_index_6(X3,X1,X5,X6,X2,X4) ],
+%		Result).
+%% Result = [(?- p_6_mtindex_156243_index_123(_,_,_,_,_,_)), ...]
+get_arbitrary_queries([],[]).
+get_arbitrary_queries(IndexRuleHeads,IndexInitialQueryForTabling) :-
+	IndexRuleHeads = [H|T],
+	functor(H,_,Arity),
+	H =.. [IndexRuleName|_],
+	length(ArbitraryArgs,Arity),
+	Query =.. [IndexRuleName|ArbitraryArgs],
+	get_arbitrary_queries(T, SubResult),
+	IndexInitialQueryForTabling = [(?- Query)|SubResult].
+
+%% TODO : General get directive util - NOT WORKING.
+%% PROBLEM : result consists of not directives but strings.
+	
+%:- export get_directives/3.
+%:- dynamic get_directives/3.
+%% get_directives([ p_6_mtindex_156243_index_123(X1,X5,X6,X2,X4,X3),
+%%		p_6_mtindex_156243_index_45(X2,X4,X1,X5,X6,X3),
+%%		p_6_mtindex_156243_index_6(X3,X1,X5,X6,X2,X4) ],
+%%		dynamic,
+%%		Result ).
+%% Result = [(:-dynamic p_6_mtindex_156243_index_123 / 6),
+%%	(:-dynamic p_6_mtindex_156243_index_45 / 6),
+%%	(:-dynamic p_6_mtindex_156243_index_6 / 6)]
+
+%get_directives([],_,[]).
+%get_directives(RuleHeads, Directive, Result) :-
+%	RuleHeads = [H|T],
+%	functor(H,_,Arity),
+%	H =.. [RuleName|_],
+%	get_directives(T,Directive,SubResult),
+%	concat_atom([Directive,' ',RuleName],Result0), %% Directive is converted as string here.
+%	Result = [(:- Result0/Arity)|SubResult].
+%get_directives(RuleHead, Directive, Result) :-
+%	functor(RuleHead,_,Arity),
+%	RuleHead =.. [RuleName|_],
+%	concat_atom([Directive,' ',RuleName],Result0),
+%	Result = (:- Result0/Arity).

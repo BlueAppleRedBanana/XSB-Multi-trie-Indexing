@@ -1,0 +1,44 @@
+%% nth0/3
+%% size/2
+%% get_element_index/3
+%% get_nth_element/3
+
+:- import nth/3 from lists.
+:- export
+	list_elements_numbers/3,
+	get_element_index/3,
+	get_nth_element/3.
+
+
+%% get_element_index(2,[1,5,6,2,4,3],N).
+%% N = 4.
+get_element_index(Element, List, Index) :-
+	get_element_index(Element, List, 1, Index).
+get_element_index(Element, [Head|Tail], N, Index) :-
+	(
+	Element = Head -> 
+		Index is N
+	;
+		N1 is N+1,
+		get_element_index(Element, Tail, N1, Index)
+	).	
+
+%% get_nth_element(['X1','X5','X6','X2','X4','X3'],3,Item).
+get_nth_element([],_,_) :-
+        write('There is no such element in the list'),nl.
+get_nth_element([Element|_],1,Item) :- 	%% index starts with 1
+        % write(['The element is ',Element]),
+        Item = Element, nl.
+get_nth_element([_|List],N,Item) :-
+        N1 is N-1,
+        get_nth_element(List,N1,Item).
+		
+list_elements_numbers(_ScrArgList,[],[]).
+list_elements_numbers(SrcArgList,ArgList,NumList) :-
+	NumList = [Num|T],
+	list_elements_numbers(SrcArgList,ArgList1,T),
+	nth(Num, SrcArgList, Element),
+	ArgList = [Element|ArgList1].
+
+
+	

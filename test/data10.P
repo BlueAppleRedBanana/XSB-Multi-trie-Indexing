@@ -1,0 +1,11 @@
+:- mtindex(p/6,trie,[[1],[2]]).
+p(a1,b1,c1,d1,e1,f1).
+p(a2,b2,c2,d2,e2,f2).
+p(a3,b3,c3,d3,e3,f3).
+p(a4,b4,c4,d4,e4,f4).
+p(a5,b5,c5,d5,e5,f5).
+p(a6,b6,c6,d6,e6,f6).
+p(a7,b7,c7,d7,e7,f7).
+p(a8,b8,c8,d8,e8,f8).
+p(a9,b9,c9,d9,e9,f9).
+p(a10,b10,c10,d10,e10,f10).

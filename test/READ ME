@@ -1,0 +1,18 @@
+Multi-trie indexing test
+
+
+genqueries.py - generates sample queries as a file. You don't need this anymore as you use runtest.P which is a recursive querying version written in Prolog. 
+
+genrules.py - generates sample data rules and queries. 
+$ python genrules.py
+You can generate any number of p/6 facts adjusting 'MAX' variable in the source code.
+Also you can adjust source code so that make it generates various query type.
+The result file name will be data.P
+
+runtest.P - query using testquery.P
+
+testquery.P - module for manipulating and ask queries. 
+
+
+
+

@@ -1,0 +1,411 @@
+
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+%#define PROFILE	%% switch for profiling
+
+
+:- dynamic '_$_$_prepare_query'/2.
+
+:- dynamic run/5.
+:- export run/5.
+
+:- import 
+	append/3,
+	length/2,
+	for/3
+   from basics.
+:- import nth0/4 from lists.
+% :- import insert_vars_list/3 from listProcessing.
+
+:- dynamic maplist/3.
+
+
+	
+
+atom_number(Atom,Number) :-
+	nonvar(Number) ->
+		number_codes(Number,Code),
+		atom_codes(Atom,Code)
+	;
+		atom_codes(Atom,Code),
+		number_codes(Number,Code).
+
+%% maplist([a,b,c,d,e,F],[1,1,1,1,1],Result).
+maplist([],[],[]).
+
+%% It's annoying, but a number is recognized as a number, not an atom.
+maplist([H1|T1], [H2|T2], Result) :-
+	nonvar(H1),
+	number(H2),
+	atom_number(Atom,H2),
+	atom_concat(H1,Atom,H),
+	maplist(T1,T2,SubResult),
+	Result = [H|SubResult].
+	
+%% Double check it's atom
+maplist([H1|T1], [H2|T2], Result) :-
+	nonvar(H1),
+	atomic(H2),
+	atom_concat(H1,H2,H),
+	maplist(T1,T2,SubResult),
+	Result = [H|SubResult].
+
+%% If target is a variable - we don't need to concat
+maplist([H1|T1], NumList, Result) :-
+	var(H1),
+	maplist(T1, NumList, Result1),
+	Result = [H1|Result1].
+	
+maplist([_|T1], [_|T2], Result) :-
+	maplist(T1,T2,SubResult),
+	%% Put _, otherwise every query will share same variables
+	Result = [_|SubResult].	
+	
+:- dynamic genlistsame/3.
+:- export genlistsame/3.
+%% results [1,1,1,1,1,1] , a list of same numbers
+
+
+genlistsame(_,0,[]).
+genlistsame(Element,Number,Result) :-
+	Number1 is Number - 1,
+	%% The list consists of numbers as atom for maplsit. 
+	%% (but it does not recognized in maplist.)
+	(number(Element) ->
+		atom_number(NumAtom,Element),
+		genlistsame(Element,Number1,SubResult),
+		Result = [NumAtom|SubResult]
+	;
+		genlistsame(Element,Number1,SubResult),
+		Result = [Element|SubResult]
+	).
+
+:- export insert_vars_list/3.
+:- dynamic insert_vars_list/3.
+% insert_vars_list([a,c,e,f],[2,4],R).
+% insert_vars_list([1,1],[1,2,5],R).
+% insert_vars_list([1,1],[3,4,5],R).
+insert_vars_list(SrcList,VarIndices,Result) :-
+	insert_vars_list(1,SrcList,VarIndices,Result).
+
+%% when var index is end of the args
+insert_vars_list(Num,[],VarIndices,Result) :- 
+	VarIndices = [_VarIndicesH|VarIndicesT],
+	insert_vars_list(Num,[],VarIndicesT,SubResult),
+	Result = [_NewVar|SubResult].
+	
+insert_vars_list(_Num,SrcList,[],SrcList).			%% when all var index is inserted
+insert_vars_list(Num,SrcList,VarIndices,Result) :-
+	VarIndices = [VarIndicesH|VarIndicesT],
+	Num = VarIndicesH,
+	Num1 is Num + 1,
+	insert_vars_list(Num1,SrcList,VarIndicesT,SubResult),
+	Result = [_NewVar|SubResult].
+insert_vars_list(Num,SrcList,VarIndices,Result) :-
+	VarIndices = [VarIndicesH|_VarIndicesT], SrcList = [SrcH|SrcT],
+	Num \= VarIndicesH,
+	Num1 is Num + 1,
+	insert_vars_list(Num1,SrcT,VarIndices,SubResult),
+	Result = [SrcH|SubResult].
+
+% replace_vars_list([a,b,c,d,e,f],[2,4],R).
+:- export replace_vars_list/3.
+:- dynamic replace_vars_list/3.
+replace_vars_list(SrcList,VarIndices,Result) :-
+	replace_vars_list(1,SrcList,VarIndices,Result).
+replace_vars_list(_Num,SrcList,[],SrcList).
+replace_vars_list(Num,SrcList,VarIndices,Result) :-
+	VarIndices = [VarIndicesH|VarIndicesT], SrcList = [_SrcH|SrcT],
+	Num = VarIndicesH,
+	Num1 is Num + 1,
+	replace_vars_list(Num1,SrcT,VarIndicesT,SubResult),
+	Result = [_NewVar|SubResult].
+replace_vars_list(Num,SrcList,VarIndices,Result) :-
+	VarIndices = [VarIndicesH|_VarIndicesT], SrcList = [SrcH|SrcT],
+	Num \= VarIndicesH,
+	Num1 is Num + 1,
+	replace_vars_list(Num1,SrcT,VarIndices,SubResult),
+	Result = [SrcH|SubResult].
+
+
+:- export prepare_arg/4.
+:- dynamic prepare_arg/4.
+% prepare_arg(3,1,10,L).
+prepare_arg(0,_Start,_End,[]).
+prepare_arg(Arity,Start,End,ArgList) :-
+	Arity > 0,
+	Arity1 is Arity - 1,
+	for(Num,Start,End),
+	prepare_arg(Arity1,Start,End,ArgList1),
+	ArgList = [Num|ArgList1].
+	
+
+:- export queryperm/4.
+:- dynamic queryperm/4.
+% queryperm(p/5,[1,2],(1,5),T).
+queryperm(Head/Arity,VarIndices,(Start,End),TotalTime) :-
+	length(VarIndices,VarArity),
+	Arity1 is Arity - VarArity,
+	cputime(T0),
+	((prepare_arg(Arity1,Start,End,ArgList),
+	insert_vars_list(ArgList,VarIndices,ArgList1),
+	Query =.. [Head|ArgList1],
+	% Repeat1 is Repeat-1,
+	findall(ArgList1,Query,List),
+	% writeln(Query+List),
+	fail);true),
+	cputime(T1),
+	TimeTaken is T1 - T0,
+	TotalTime is TimeTaken.
+
+:- export runp_num/5.
+:- dynamic runp_num/5.
+% runp_num(p/5,[1,2,5],(1,2),10,T).
+runp_num(_Head/_Arity,_VarIndices,(_Start,_End),0,0).
+runp_num(Head/Arity,VarIndices,(Start,End),Repeat,TotalTime) :-
+	Repeat1 is Repeat - 1,
+	queryperm(Head/Arity,VarIndices,(Start,End),TotalTime1),
+	runp_num(Head/Arity,VarIndices,(Start,End),Repeat1,TotalTime2),
+	TotalTime is TotalTime1 + TotalTime2.
+	
+:- dynamic varindices_arglist/2, varindices_arglist1/3.
+:- export varindices_arglist/2, varindices_arglist1/3.
+% varindices_arglist(VarIndices,[a,b,C,d,E,f]).
+varindices_arglist(VarIndices,ArgList) :-
+	varindices_arglist1(VarIndices,ArgList,1).
+
+varindices_arglist1([],[],_Num).
+varindices_arglist1(VarIndices,ArgList,Num) :-
+	ArgList = [H|T], Num1 is Num + 1,
+	(var(H) 
+		->	varindices_arglist1(VarIndices1,T,Num1),
+			VarIndices = [Num|VarIndices1]
+		;	varindices_arglist1(VarIndices,T,Num1)
+	).
+	
+:- export maplistlist/4.
+:- dynamic maplistlist/4.
+% maplistlist(p,[a,b,c,d,e,F],[[1,1,1,1,1,1],[1,2,3,4,5,6],[1,2,1,3,5,2]],QueryList).
+maplistlist(_Head,_ArgList,[],[]).
+maplistlist(Head,ArgList,NumList,QueryList) :-
+	NumList = [H|T],
+	maplist(ArgList,H,QueryArgs),
+	SubQuery =.. [Head|QueryArgs],
+	maplistlist(Head,ArgList,T,SubQueryList),
+	QueryList = [SubQuery|SubQueryList].
+
+%% DEPRECATED prepare_permr_queries
+%% USE queryperm
+:- export prepare_permr_queries/5, prepare_permr_queries/6, prepare_permr_queries/7.
+:- dynamic prepare_permr_queries/5, prepare_permr_queries/6, prepare_permr_queries/7.
+%% prepare_permr_queries(p/6,[a,b,c,d,e,F],(1,10),10,Q).
+prepare_permr_queries(Head/Arity,ArgList,(Start,End),Group,QueryList) :-
+	!,
+	assert('_$_$_prepare_query'(Start,End)),
+	%% to ignore nonvar args
+	varindices_arglist(VarIndices,ArgList),
+	length(VarIndices,VarArity),
+	Arity1 is Arity - VarArity,
+	prepare_permr_queries(Start,Arity1,Group,CountResult,[],[],NumList),
+	%maplistlist(Head,ArgList,NumList,QueryList).
+	map_head_list(Head,NumList,QueryList).
+
+%% terminal when count reaches end.
+prepare_permr_queries(_Num,_Arity,0,_CountResult,_PrevSet,PrevList,L) :-
+	L = PrevList, true.
+%% terminal when digit and number reache out end
+prepare_permr_queries(Num,1,Count,CountResult,PrevSet,PrevList,L) :-
+	'_$_$_prepare_query'(_Start,End),
+	End = Num,
+	Count > 0,
+	writeln('+End_End Arity 0'+PrevList),
+	append(PrevSet,[End],NewPerm),
+	append(PrevList,[NewPerm],L),
+	CountResult is Count - 1.
+
+%% Go current digit, next number.
+prepare_permr_queries(Current,1,Count,CountResult,PrevSet,PrevList,L) :-
+	'_$_$_prepare_query'(_Start,End),
+	Current \= End,
+	Count > 0,
+	% writeln('+Arity 0'+PrevSet),
+	append(PrevSet,[Current],NewPerm),
+	append(PrevList,[NewPerm],PrevList1),
+	Count1 is Count - 1,
+	Current1 is Current + 1,
+	prepare_permr_queries(Current1,1,Count1,CountResult,PrevSet,PrevList1,L).
+
+%% Go next digit, with start number. 
+prepare_permr_queries(Num,Arity,Count,CountResult,PrevSet,PrevList,L) :-
+	'_$_$_prepare_query'(Start,End),
+	End = Num,
+	% writeln('+End_End'+Prev),
+	append(PrevSet,[End],PrevSet1),
+	Arity1 is Arity - 1,
+	prepare_permr_queries(Start,Arity1,Count,CountResult,PrevSet1,PrevList,L).
+	% append([End],SubResult1,L),
+	% writeln('_End_End'+L).
+
+prepare_permr_queries(Current,Arity,Count,CountResult,PrevSet,PrevList,L) :-
+	% writeln('+Start'+PrevSet),
+	'_$_$_prepare_query'(Start,_End),
+	append(PrevSet,[Current],PrevSet1),
+	%% Go next digit, from the starting num.
+	Arity1 is Arity - 1,
+	prepare_permr_queries(Start,Arity1,Count,CountResult1,PrevSet1,PrevList,SubResult1),
+	%% Go current digit, next value.
+	Current1 is Current + 1,
+	prepare_permr_queries(Current1,Arity,CountResult1,CountResult,PrevSet,SubResult1,SubResult2),
+	L = SubResult2.
+
+
+
+%% When only argument index is given while argument lists is not.
+%% Generates only numbers. 
+%% ex) [1,1,1,1,1,X] [2,2,2,2,2,X]...
+%% argindex_queryargs(1,6,6,Q).
+argindex_queryargs(Num,Arity,ArgIndex,QueryArgs) :-
+	%% make QueryArgs = [List1,X,List2]
+	LenBeforeVar is ArgIndex-1,
+	LenAfterVar is Arity-ArgIndex,
+	genlistsame(Num,LenBeforeVar,List1),
+	genlistsame(Num,LenAfterVar,List2),
+	List3 = [_|List2],	%% Put new var _
+	append(List1,List3,QueryArgs).
+
+%% arglist_queryargs(1,6,[a,b,c,d,e,F],QueryArgs).
+arglist_queryargs(Num,Arity,ArgList,QueryArgs) :-
+	genlistsame(Num,Arity,NumList),
+	maplist(ArgList,NumList,QueryArgs).	%% QueryArgs = [a1,b1,c1,d1,e1,F1]
+
+prepare_queries_num(_/_,_,(Start,End),QueryList) :- 
+	(End < Start) -> QueryList= [].
+prepare_queries_num(Head/Arity,ArgIndex,(Start,End),QueryList) :-
+	argindex_queryargs(Start,Arity,ArgIndex,QueryArgs),
+	Query =.. [Head|QueryArgs],
+	Start1 is Start+1,
+	prepare_queries_num(Head/Arity,ArgIndex, (Start1,End), SubList),
+	QueryList = [Query|SubList].
+
+%% prepare_queries(p/6,[a,b,c,d,e,F],(1,100000),Result).
+%% Or
+%% prepare_queries(p/6, 6, (1,100000),Result).
+prepare_queries(_/_,_,(Start,End),QueryList) :- 
+	(End < Start) -> QueryList= [].
+prepare_queries(Head/Arity,ArgList,(Start,End),QueryList) :-
+	(is_list(ArgList) -> 
+		%% [a,b,c,d,e,F]
+		arglist_queryargs(Start,Arity,ArgList,QueryArgs)
+	;
+		%% 6, index position in the arguments. 
+		argindex_queryargs(Start,Arity,ArgList,QueryArgs)
+	),
+	Query =.. [Head|QueryArgs],
+	Start1 is Start+1,
+	prepare_queries(Head/Arity, ArgList, (Start1,End), SubList),
+	QueryList = [Query|SubList].
+
+
+%% Run
+%% Two cases.
+%% run(p/6,[a,b,c,d,e,F],(1,100000),(5000,5),TotalTime).
+%% Or
+%% run(p/6,6,(1,100000),(10000,5),TotalTime).
+%% -> In the case of the facts' arguments are only numbers. 
+%% ex) p(1,1,1,1,1,1).
+%% ArgIndex should start with 1.
+
+run(_/_,_,(Start,End),(_,_),TotalTime) :- 
+	(End < Start) -> TotalTime is 0.
+run(Head/Arity,ArgList,(Start,End),(GroupSize,Repeat),TotalTime) :-
+	GroupPos is Start+GroupSize-1,
+	!,
+	GroupPos =< End,
+	write('Preparing queries...'),
+	prepare_queries(Head/Arity,ArgList,(Start,GroupPos),QueryList),
+	write('end.  '),
+	write('Querying...'),
+	!,
+#ifdef PROFILE
+	xsb_profiling:profile_call(query_group(QueryList,Repeat,TimeTaken)),
+#else
+	query_group(QueryList,Repeat,TimeTaken),
+#endif
+	writeln(['Query:',Start,GroupPos,'Repeat:',Repeat,'Time:',TimeTaken]),
+	GroupPos1 is GroupPos+1,
+	run(Head/Arity,ArgList,(GroupPos1,End),(GroupSize,Repeat),SubTotalTime),
+	TotalTime is TimeTaken+SubTotalTime.
+
+%% Overloading
+%% No Repeat -> repeat once.
+%% run(p/6,[a,b,c,d,e,F],(1,100000),5000,TotalTime).
+run(Head/Arity,ArgIndex,(Start,End),GroupSize,TotalTime) :-
+	run(Head/Arity,ArgIndex,(Start,End),(GroupSize,1),TotalTime).
+%% No Repeat, No range -> Start with 1 to Number, repeat once.
+%% run(p/6,[a,b,c,d,e,F],(1,100000),5000,TotalTime).
+run(Head/Arity,ArgIndex,Number,GroupSize,TotalTime) :-
+	run(Head/Arity,ArgIndex,(1,Number),(GroupSize,1),TotalTime).
+
+%% findamount(Num,6,1000).
+findamount(Num,Arity,GroupSize) :-
+	findamount1(Num,1,Arity,GroupSize).
+	
+findamount1(Return,Num,Arity,GroupSize) :-
+	(Arity**Num > GroupSize
+		->	Return = Num
+		;	Num1 is Num + 1,
+			findamount1(Return,Num1,Arity,GroupSize)
+	).
+
+
+%% run test to permutation with repetition facts
+%% GroupSize should be given to the times of the N**Arity
+%% If it isn't query will be duplicated.
+runp_charnum(Head/Arity,ArgList,(Start,End),(GroupSize,Repeat),TotalTime) :-
+	%% group end check
+	%% Amount**Arity == GroupSize -> log_Amount(GroupSize) = Arity
+	findamount(UntilGroup,Arity,GroupSize),
+	!,
+	UntilGroup =< End,
+	write('Preparing queries...'), 
+	prepare_permr_queries(Head/Arity,ArgList,(Start,UntilGroup),GroupSize,QueryList),
+	write('end.  '),
+	write('Querying...'),
+	!,
+#ifdef PROFILE
+	xsb_profiling:profile_call(query_group(QueryList,Repeat,TimeTaken)),
+#else
+	query_group(QueryList,Repeat,TimeTaken),
+#endif
+	writeln(['Query:',Start,UntilGroup,'Repeat:',Repeat,'Time:',TimeTaken]),
+	UntilGroup1 is UntilGroup + 1,
+	run(Head/Arity,ArgList,(UntilGroup1,End),(GroupSize,Repeat),SubTotalTime),
+	TotalTime is TimeTaken+SubTotalTime.
+
+	
+	
+%%%% Actual querying	
+%% query_group([p(a1,b1,c1,d1,e1,F1),p(a2,b2,c2,d2,e2,F2),p(a3,b3,c3,d3,e3,F3)],1).
+:- export query_group/1.
+:- dynamic query_group/1.	
+query_group([]).
+query_group([Query|[]]) :-
+	Query.
+query_group([Query|List]) :-
+	Query,
+	query_group(List).
+
+:- export query_group/2.
+:- dynamic query_group/2.
+query_group(_,0,0).
+query_group(QueryList,Repeat,TotalTime) :-
+	Repeat1 is Repeat-1,
+	cputime(T0),
+	query_group(QueryList),
+	cputime(T1),
+	TimeTaken is T1-T0,
+%	writeln(['Repeat:',Repeat,TimeTaken]),
+	query_group(QueryList,Repeat1,SubTotalTime),
+	TotalTime is TimeTaken + SubTotalTime.
+	
+

@@ -1,0 +1,30 @@
+%% termExp.P has a series of 'term_expansion's which catch :-mtindex directive
+%% and indexing target facts. 
+%% Other files should be loaded into XSB compiler before 
+%% term_expansions in the file, termExp.P are loaded to avoid them from 
+%% being caught by term_expansion unnecessarily.
+
+%% genMtindexRule.P and genNewbase.P has rules which generate necessary conversion rules.
+
+
+
+?- [listProcessing],[directiveUtil],spy(get_nonvar_check),
+load_dyn(genMtindexRule_kifer),[genNewbase], load_dyn(termExp).
+% ?- load_dyn(termExp).	%% termExp should be in usermod and public, not in the module and private.
+
+?- shell('touch data10k.P'),
+xsb_profiling:profile_unindexed_calls(on),
+% spy(term_expansion),
+% spy(get_nonvar_check),
+xsb_profiling:profile_call(load_dyn(data10k)).
+
+?- 
+%listing(p), 
+listing(p_6_mtindex_156243), 
+listing(p_6_mtindex_156243_6_index_156), 
+listing(p_6_mtindex_156243_6_index_24),
+listing(p_6_mtindex_156243_6_index_3).
+
+%?- 
+%statistics.
+

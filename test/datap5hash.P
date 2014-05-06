@@ -1,0 +1,122 @@
+
+
+/** Reference - soen.kr Chapter 19-1 Dynamic Array */
+/** This example is about address management program */
+/** The program uses dynamic allocation to manage array. */
+/** InitArray is a function to make a new array */
+/** Insert, Delete, Append are all functions for modifying array */
+/** You can modify this program using vector not C-style array */
+
+#include <Turboc.h>
+ 
+#define ELETYPE int
+
+
+struct tag_NameCard
+{
+     char name[10];
+     char tel[15];
+     char addr[32];
+};
+ 
+#define ELETYPE tag_NameCard
+
+ELETYPE *ar;
+unsigned size;
+unsigned num;
+unsigned growby;
+ 
+void InitArray(unsigned asize, unsigned agrowby)
+{
+     size=asize;
+     growby=agrowby;
+     num=0;
+     ar=(ELETYPE *)malloc(size*sizeof(ELETYPE));
+}
+ 
+void Insert(int idx, ELETYPE value)
+{
+     unsigned need;
+ 
+     need=num+1;
+     if (need > size) {
+          size=need+growby;
+          ar=(ELETYPE *)realloc(ar,size*sizeof(ELETYPE));
+     }
+     memmove(ar+idx+1,ar+idx,(num-idx)*sizeof(ELETYPE));
+     ar[idx]=value;
+     num++;
+}
+ 
+void Delete(int idx)
+{
+     memmove(ar+idx,ar+idx+1,(num-idx-1)*sizeof(ELETYPE));
+     num--;
+}
+ 
+void Append(ELETYPE value)
+{
+     Insert(num,value);
+}
+ 
+void UnInitArray()
+{
+     free(ar);
+}
+ 
+/** Printing out array **/
+void DumpArray(char *sMark)
+{
+     unsigned i;
+     printf("%16s => Size=%02d,Elements=%02d : ",sMark,size,num);
+     for (i=0;i<num;i++) {
+          printf("%2d ",ar[i]);
+     }
+     printf("\n");
+}
+
+void main()
+{
+     char ch;
+     unsigned i;
+     tag_NameCard Temp;
+ 
+     InitArray(10,5);
+     for (;;) {
+          printf("Input your command(1:View, 2:Add, 3:Delete, Q:Exit) > ");
+          ch=getch();
+          printf("\n");
+          if (ch == 'Q' || ch == 'q') {
+              break;
+          }
+ 
+          switch(ch) {
+          case '1':
+              if (num == 0) {
+                   printf("There is no address enrolled.\n");
+              } else {
+                   for (i=0;i<num;i++) {
+                        printf("%d, Name:%s, Phone:%s, Address:%s\n",i,ar[i].name,
+                             ar[i].tel,ar[i].addr);
+                   }
+              }
+              break;
+          case '2':
+              printf("Please input name(9 chars max) : ");gets(Temp.name);
+              printf("Input phone number(14 digits max) : ");gets(Temp.tel);
+              printf("Input address(31 chars max) : ");gets(Temp.addr);
+              Append(Temp);
+              break;
+          case '3':
+              printf("Input phone number to delete : ");scanf("%d",&i);
+              if (i < num) {
+                   Delete(i);
+              } else {
+                   printf("No matched number found.\n");
+              }
+              break;
+          }
+     }
+ 
+     UnInitArray();
+}

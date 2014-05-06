@@ -1,0 +1,159 @@
+:- import perm/2, select/3 from basics.
+:- import append/3, member/2 from lists.
+:- export maplist/3.
+%% maplist([a,b,c,d,e,F],[1,1,1,1,1,1],Result).
+maplist([],[],[]).
+
+%% It's annoying, but a number is recognized as a number, not an atom.
+maplist([H1|T1], [H2|T2], Result) :-
+	nonvar(H1),
+	number(H2),
+	atom_number(Atom,H2),
+	atom_concat(H1,Atom,H),
+	maplist(T1,T2,SubResult),
+	Result = [H|SubResult].
+
+%% Double check it's atom
+maplist([H1|T1], [H2|T2], Result) :-
+	nonvar(H1),
+	atomic(H2),
+	atom_concat(H1,H2,H),
+	maplist(T1,T2,SubResult),
+	Result = [H|SubResult].
+	
+%% If target is a variable - we don't need to concat 
+maplist([_|T1], [_|T2], Result) :-
+	maplist(T1,T2,SubResult),
+	%% Put _, otherwise every query will share permutation variables
+	Result = [_|SubResult].
+
+:- export permute/2.
+permute([], []).
+permute([X|Rest], L) :-
+    permute(Rest, L1),
+    select(X, L, L1).
+
+:- export numlist/3.
+numlist(A, B, []) :- 
+	A > B.
+numlist(A, B, [A|Xs]) :- 
+	A =< B, 
+	A1 is A + 1, 
+	numlist(A1, B, Xs).
+
+%% [1,1,1,1],[1,1,1,2] ... [100,100,100,100]
+:- export perms_R/2.
+% perms_R([A,B,C,D],[1,2,3,4]).
+perms_R([], _).
+perms_R([Item|NList], List):-
+  member(Item, List),
+  perms_R(NList, List).
+
+:- export myPermutation/2, myPermutation/3.
+myPermutation([], []).
+myPermutation(L, [H|P]):-
+  select(H, L, NL), % Select one item from the list
+  myPermutation(NL, H, P).
+
+myPermutation([], _, []).
+myPermutation(L, H, [I|P]):-
+  select(I, L, NL), % Select another item
+  I \= H, % Enforce restriction of no duplicate consecutive items
+  myPermutation(NL, I, P).
+
+% repeatperms(Start,End,L) :-
+	% numlist(Start,End,List),
+	% length(NumList,Length),
+	% length(TempArgs,Length),
+	% perms_R(TempArgs,NumList).
+	
+
+repeatperm2(Start,End,L1,L2) :-
+	L2 = [Start|L1].
+repeatperm1(Start,End,0,L) :-
+	L = [Start].
+repeatperm1(Start,End,Arity,L) :-
+	Arity1 is Arity-1,
+	repeatperm2(Start,End,Arity1,L1).
+	
+repeatperm(End,End,Arity,L) :-
+	repeatperm1(End,End,Arity,L).
+repeatperm(Start,End,Arity,L) :-
+	repeatperm1(Start,End,Arity,L1),
+	Start1 is Start + 1,
+	repeatperm(Start1,End,Arity,L2),
+	append(L1,L2,L).
+
+	
+
+% permsarity(Start,End,Arity,Prev,L) :-
+	% Arity1 is Arity - 1,
+	% permsnum(Start,End,Arity1,Prev,L).
+
+% permsnum(Start,End,Arity,Prev,L) :-
+	% perms
+	
+	
+:- export repeatperms/5, repeatperms/4, repeatperms/6, repeatperms/7.
+repeatperms(Start,End,Arity,L) :-
+	repeatperms(Start,Start,End,Arity,[],[],L).
+
+repeatperms(Start,End,End,1,PrevSet,PrevList,L) :-
+	% writeln('+End_End Arity 0'+PrevList),
+	append(PrevSet,[End],NewPerm),
+	append(PrevList,[NewPerm],L).
+
+%% Go current digit, next number.
+repeatperms(Start,Current,End,1,PrevSet,PrevList,L) :-
+	% writeln('+Arity 0'+PrevSet),
+	append(PrevSet,[Current],NewPerm),
+	append(PrevList,[NewPerm],PrevList1),
+	Current1 is Current + 1,
+	repeatperms(Start,Current1,End,1,PrevSet,PrevList1,L).
+
+%% Go next digit, with start number. 
+repeatperms(Start,End,End,Arity,PrevSet,PrevList,L) :-
+	% writeln('+End_End'+Prev),
+	append(PrevSet,[End],PrevSet1),
+	Arity1 is Arity - 1,
+	repeatperms(Start,Start,End,Arity1,PrevSet1,PrevList,L).
+	% append([End],SubResult1,L),
+	% writeln('_End_End'+L).
+
+repeatperms(Start,Current,End,Arity,PrevSet,PrevList,L) :-
+	% writeln('+Start'+PrevSet),
+	append(PrevSet,[Current],PrevSet1),
+	Arity1 is Arity - 1,
+	%% Go next digit
+	repeatperms(Start,Start,End,Arity1,PrevSet1,PrevList,SubResult1),
+	% append(L1,SubResult1,L2),
+	Current1 is Current + 1,
+	%% Go current digit, next value.
+	repeatperms(Start,Current1,End,Arity,PrevSet,SubResult1,SubResult2),
+	%%append(SubResult1,SubResult2,L),
+	L = SubResult2.
+
+repeatperms1(Start,End,Arity,Prev,L) :-
+	Start1 is Start + 1,
+	repeatperms(Start1,End,Arity,Prev,L).
+
+:- export genlist_permutation/3.
+genlist_permutation(_,0,[]).
+genlist_permutation(Element,Number,Result) :-
+	Number1 is Number - 1,
+	%% The list consists of numbers as atom for maplsit. 
+	%% (but it does not recognized in maplist.)
+	(number(Element) ->
+		atom_number(NumAtom,Element),
+		genlist_permutation(Element,Number1,SubResult),
+		Result = [NumAtom|SubResult]
+	;
+		genlist_permutation(Element,Number1,SubResult),
+		Result = [Element|SubResult]
+	).
+	
+:- export arglist_queryargs/4.
+%% arglist_queryargs(1,6,[a,b,c,d,e,F],QueryArgs).
+arglist_queryargs(Num,Arity,ArgList,QueryArgs) :-
+	genlist_permutation(Num,Arity,NumList),
+	maplist(ArgList,NumList,QueryArgs). %% QueryArgs = [a1,b1,c1,d1,e1,F1]

@@ -1,0 +1,174 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+
+%#define ALL
+#define B156
+%#define B24
+%#define B3
+%#define BALL
+
+#ifdef ALL
+%% base all 
+(:-dynamic index_156 / 6).
+(:-dynamic index_24 / 6).
+(:-dynamic index_3 / 6).
+(:-table index_156 / 6  as  subsumptive).
+(:-table index_24 / 6  as  subsumptive).
+(:-table index_3 / 6  as  subsumptive).
+(index_156(X1,X5,X6,X2,X3,X4) :- p_6_newbase_156243(X1,XX2,XX3,XX4,X5,X6)  ','
+  X2 = XX2  ','
+  X3 = XX3  ','
+  X4 = XX4).
+(index_24(X2,X4,X1,X3,X5,X6) :- p_6_newbase_156243(XX1,X2,XX3,X4,XX5,XX6)  ','
+  X1 = XX1  ','
+  X3 = XX3  ','
+  X5 = XX5  ','
+  X6 = XX6).
+(index_3(X3,X1,X2,X4,X5,X6) :- p_6_newbase_156243(XX1,XX2,X3,XX4,XX5,XX6)  ','
+  X1 = XX1  ','
+  X2 = XX2  ','
+  X4 = XX4  ','
+  X5 = XX5  ','
+  X6 = XX6).
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X1) -> index_156(X1,X5,X6,X2,X3,X4)  ';'
+  nonvar(X2) -> index_24(X2,X4,X1,X3,X5,X6)  ';'
+  nonvar(X3) -> index_3(X3,X1,X2,X4,X5,X6)).
+#endif
+
+#ifdef B156
+%% base 1,5,6
+(:-dynamic index_156 / 6).
+(:-dynamic index_24 / 5).
+(:-dynamic index_3 / 4).
+(:-table index_156 / 6  as  subsumptive).
+(:-table index_24 / 5  as  subsumptive).
+(:-table index_3 / 4  as  subsumptive).
+
+(index_156(X1,X5,X6,X2,X4,X3) :- p_6_newbase_156243(X1,XX2,XX3,XX4,X5,X6)  ','
+  X2 = XX2  ','
+  X3 = XX3  ','
+  X4 = XX4).
+(index_24(X2,X4,X1,X5,X6) :- p_6_newbase_156243(XX1,X2,_XX3,X4,XX5,XX6)  ','
+  X1 = XX1  ','
+  X5 = XX5  ','
+  X6 = XX6).
+(index_3(X3,X1,X5,X6) :- p_6_newbase_156243(XX1,_XX2,X3,_XX4,XX5,XX6)  ','
+  X1 = XX1  ','
+  X5 = XX5  ','
+  X6 = XX6).
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X1) -> index_156(X1,X5,X6,X2,X4,X3)  ';'
+  nonvar(X2) -> index_24(X2,X4,X1,X5,X6), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)  ';'
+  nonvar(X3) -> index_3(X3,X1,X5,X6), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)
+  ).
+#endif
+
+#ifdef B24
+%% base 2,4 
+(:-dynamic index_156 / 5).
+(:-dynamic index_24 / 6).
+(:-dynamic index_3 / 3).
+(:-table index_156 / 5  as  subsumptive).
+(:-table index_24 / 6  as  subsumptive).
+(:-table index_3 / 3  as  subsumptive).
+(index_24(X2,X4,X1,X5,X6,X3) :- p_6_newbase_156243(XX1,X2,XX3,X4,XX5,XX6),
+	X1 = XX1,
+	X5 = XX5,
+	X6 = XX6,
+	X3 = XX3).
+(index_156(X1,X5,X6,X2,X4) :- p_6_newbase_156243(X1,XX2,_XX3,XX4,X5,X6)  ','
+  X2 = XX2  ','
+  X4 = XX4).
+(index_3(X3,X2,X4) :- p_6_newbase_156243(_XX1,XX2,X3,XX4,_XX5,_XX6)  ','
+  X2 = XX2  ','
+  X4 = XX4).
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X2) -> index_24(X2,X4,X1,X5,X6,X3) ';'
+  nonvar(X1) -> index_156(X1,X5,X6,X2,X4), p_6_newbase_156243(X1,X2,X3,X4,X5,X6) ';'
+  nonvar(X3) -> index_3(X3,X2,X4), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)
+  ).
+#endif
+
+#ifdef B3
+%% base 3
+(:-dynamic index_156 / 4).
+(:-dynamic index_24 / 3).
+(:-dynamic index_3 / 6).
+(:-table index_156 / 4  as  subsumptive).
+(:-table index_24 / 3  as  subsumptive).
+(:-table index_3 / 6  as  subsumptive).
+(index_3(X3,X1,X5,X6,X2,X4) :- p_6_newbase_156243(XX1,XX2,X3,XX4,XX5,XX6)  ','
+  X1 = XX1,
+  X2 = XX2,
+  X4 = XX4,
+  X5 = XX5,
+  X6 = XX6).
+(index_24(X2,X4,X3) :- p_6_newbase_156243(_XX1,X2,XX3,X4,_XX5,_XX6),
+	X3 = XX3).
+(index_156(X1,X5,X6,X3) :- p_6_newbase_156243(X1,_XX2,XX3,_XX4,X5,X6)  ','
+	X3 = XX3).
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X3) -> index_3(X3,X1,X5,X6,X2,X4) ;
+  nonvar(X2) -> index_24(X2,X4,X3), p_6_newbase_156243(X1,X2,X3,X4,X5,X6) ;
+  nonvar(X1) -> index_156(X1,X5,X6,X3), p_6_newbase_156243(X1,X2,X3,X4,X5,X6)
+  ).
+#endif
+
+#ifdef BALL
+%% base all
+(:-dynamic index_156 / 6).
+(:-dynamic index_24 / 6).
+(:-dynamic index_3 / 6).
+(:-table index_156 / 6  as  subsumptive).
+(:-table index_24 / 6  as  subsumptive).
+(:-table index_3 / 6  as  subsumptive).
+index_all(X1,X5,X6,X2,X4,X3) :- p_6_newbase_156243(X1,X2,X3,X4,X5,X6).
+index_156(X1,X5,X6,X2,X4,X3) :- index_all(X1,X5,X6,X2,X4,X3).
+index_24(X2,X4,X1,X5,X6,X3) :- index_all(X1,X5,X6,X2,X4,X3).
+index_3(X3,X1,X5,X6,X2,X4) :- index_all(X1,X5,X6,X2,X4,X3).
+
+
+(p(X1,X2,X3,X4,X5,X6) :- p_6_mtindex_156243(X1,X2,X3,X4,X5,X6)).
+(p_6_mtindex_156243(X1,X2,X3,X4,X5,X6) :-
+  nonvar(X3) -> index_3(X3,X1,X5,X6,X2,X4);
+  nonvar(X2) -> index_24(X2,X4,X1,X5,X6,X3);
+  nonvar(X1) -> index_156(X1,X5,X6,X2,X4,X3)
+  ).
+#endif
+
+?- [newbase10k_123456].
+
+#ifdef ALL
+(?-index_156(_,_,_,_,_,_)).
+(?-index_24(_,_,_,_,_,_)).
+(?-index_3(_,_,_,_,_,_)).
+#endif
+
+#ifdef B156
+(?-index_156(_,_,_,_,_,_)).
+(?-index_24(_,_,_,_,_)).
+(?-index_3(_,_,_,_)).
+#endif
+
+#ifdef B24
+(?-index_156(_,_,_,_,_)).
+(?-index_24(_,_,_,_,_,_)).
+(?-index_3(_,_,_)).
+#endif
+
+#ifdef B3
+(?-index_156(_,_,_,_)).
+(?-index_24(_,_,_)).
+(?-index_3(_,_,_,_,_,_)).
+#endif
+
+#ifdef BALL
+(?-index_156(_,_,_,_,_,_)).
+(?-index_24(_,_,_,_,_,_)).
+(?-index_3(_,_,_,_,_,_)).
+#endif

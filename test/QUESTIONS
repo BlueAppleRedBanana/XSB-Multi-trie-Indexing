@@ -1,0 +1,93 @@
+QUESTIONS
+
+
+0. Dynamic and Static
+1. Why do we use :- export?
+
+What I have understood is this;
+
+consult/1 or [filename] will load file (both does same thing.) 
+Whether the code will be in the usermod or module depends on :- export directive.
+Whether the code will be static or dynamic depends on :- dynamic directive. 
+
+consult/1 & with dynamic directive : dynamic, can be seen in listing/0.
+consult/1 & with export directive : static, file module
+consult/1 & without any directive : static, usermod 
+consult/1 & with both, export and dynamic directive : ?? 
+load_dyn/1 & regardless of directive : dynamic can be seen in listing/0.
+
+However, I barely imagine why we need to put static codes in the different modules.(when :- export directive is required.) consult/1 or [filename] will eventually load them into XSB. 
+
+1.1. We can see dynamic rules by listing/0. Is there anyway to see loaded static rules like listing/0 does for dynamic?
+
+
+2. Why does :- dynamic p_mtindex harm the performance that much?
+-> DUNNO. Probably, nonvar switch can get huge benefit from static compiled one. 
+
+
+3. Can :- dynamic index_156/6 update its table dynamically?
+
+%%%% in data10k_idx.P there are those clauses. 
+:- table index_156/6 as subsumptive.
+:- dynamic index_156/6.
+index_156(X1,X5,X6,X2,X4,X3) :- p_6_newbase_156243(X1,X2,X3,X4,X5,X6).
+p_6_newbase_156243(a1,b1,c1,d1,e1,f1). % and 10k facts follow
+%%%%
+
+if someone(or program) assert 10001st fact, for example, assertz(p_6_newbase_156243(a10001,b10001,c10001,d10001,e10001,f10001)., then can the table be updated by automatically?
+
+Also, to assert new fact, is it necessary that the fact predicate p_6_newbase_156243/6 should be dynamic?
+-> YES. retract and assert should be done only when those predicates are dynamic, or not enrolled in XSB.
+
+
+4. Is there any 'scope' for the consulting? [data10k_idx] will get all newbase facts; however, term_expansion's consult [data10k_idx] does not get it correctly. 
+
+(You can ignore this part as bunch of explanation is required. I would like to tell you this in person)
+
+In my program, there are several steps for loading. 
+#1. loading mtindex.P - this will load mtindex-transform program which consist of sets of term_expansions/2 to hook input file. 
+#2. loading data10k.P 
+- this will be caught by term_expansions/2 
+- mtindex-transform program will generate all necessary index rules and put them into outfile 'data10k_idx.P' 
+- end_of_file of data10k.P will be caught by term_expansions/2, and outfile will be loaded in the end. 
+
+#3. Thus, in the final state, 
+we can just load already generated [data10k_idx] instead of generating mtindex using data input file for testing (if the datafile has not changed)
+
+#4 The problem is, [data10k_idx] can load rules correctly
+while consult(data10k_idx) in the term_expansion/2 of the program does not load rules correctly. 
+
+If I put :- dynamic directive to all rules in the data10k_idx, then the program loading works. 
+
+
+%% NEWLY REVEALED
+[run] does not relate to consult or load_dyn
+only [runtest] relates to the issue. 
+
+
+5. Are only facts available to load dynamically? - should rules be loaded statically? 
+
+Some people know like that, but in my test, rules term_expansions/2 can be loaded by load_dyn/1 and appears in listing/0 without :- dynamic directive. 
+
+
+6. How can I expand test further?
+
+- I am trying to test on permutation facts 
+a1,b1,c1
+a2,b2,c2
+
+->
+a1,b1,c1,
+a1,b1,c2,
+...
+a3,b1,c1,
+a3,b3,c3
+
+
+
+
+
+7. load_dyn works differently. 
+
+when del *.xwam and [mtindex1] -> it does not process ?- listing/0 queries.
+using compiled xwam, [mtindex1] -> it shows listing/0 queries. 

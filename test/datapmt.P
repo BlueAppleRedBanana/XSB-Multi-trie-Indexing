@@ -1,0 +1,10 @@
+:- compiler_options([xpp_on]).
+#include "char_defs.h"
+#define START 1
+#define END 10
+
+:- import for/3 from basics.
+
+% :- mtindex(p/6,trie,[[1,5],[2,4],[6]]).
+
+p(X1,X2,X3,X4,X5,X6) :- for(X1,START,END),for(X2,START,END),for(X3,START,END),for(X4,START,END),for(X5,START,END),for(X6,START,END).
